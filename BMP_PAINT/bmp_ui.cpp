@@ -78,6 +78,11 @@ void BMP_ui::Save(QString filename, QImage image){
 
     fwrite(&b_header, sizeof(b_header), 1, file);
     fwrite(&b_info, sizeof(b_info), 1, file);
+	
+	int padding = 0;
+    if((b_info.biWidth * 3) % 4 != 0){
+        padding = 4 - (b_info.biWidth * 3) % 4;
+    }
 
     for(int y = 0; y < h; y++){
         for(int x = 0; x < w; x++){
@@ -88,8 +93,10 @@ void BMP_ui::Save(QString filename, QImage image){
             RGBTriple temp = {blue, green, red};
             fwrite(&temp, sizeof(temp), 1, file);
         }
-        RGBTriple temp2 = {0, 0 ,0};
-        fwrite(&temp2, sizeof(temp), w%4, file);
+        if(padding != 0){
+            RGBTriple temp = {0, 0, 0};
+            fwrite(&temp, padding, 1, file);
+        }
     }
     fclose(file);
 }
