@@ -20,7 +20,7 @@ void enq(Queue* q, type value);
 type deq(Queue* q);
 int isFull(Queue* q);
 int isEmpty(Queue* q);
-
+void delQ(Queue** q);
 
 void initQ(Queue* q){
     q->capacity = START_SIZE;
