@@ -31,6 +31,11 @@ MainWindow::~MainWindow()
 void MainWindow::slotTimer(){
     timer->stop();
     scene->setSceneRect(0, 0, ui->graphicsView->width() - 10,  ui->graphicsView->height() - 10);
+    /*bmp->resizeRaster(ui->graphicsView->width(),
+                      ui->graphicsView->height(),
+                      bmp->b_info.biWidth,
+                      bmp->b_info.biHeight);*/
+    //drawRaster();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event){
@@ -39,10 +44,10 @@ void MainWindow::resizeEvent(QResizeEvent *event){
 }
 
 void MainWindow::resize(int x, int y){
+    ui->graphicsView->resize(x + 10, y + 10);
     scene->setSceneRect(0, 0, x, y);
-    ui->graphicsView->resize(scene->width() + 10, scene->height() + 10);
     ui->splitter->resize(ui->graphicsView->width() + ui->groupBox->width(), ui->graphicsView->height());
-    MainWindow::setGeometry(MainWindow::x(), MainWindow::y(), ui->splitter->width(), ui->splitter->height()+42);
+    MainWindow::setGeometry(MainWindow::x(), MainWindow::y(), ui->splitter->width() + 5, ui->splitter->height()+40);
 }
 
 void MainWindow::drawRaster(){
@@ -69,6 +74,16 @@ void MainWindow::Action(){
     if(invert_flag){
         bmp->Invert((int)scene->beginPoint.x(), (int)scene->beginPoint.y(), (int)sqrt(pow(scene->endPoint.x() - scene->beginPoint.x(),2)
                                                                        +pow(scene->endPoint.y() - scene->beginPoint.y(), 2)));
+        drawRaster();
+    }
+    if(crop_flag){
+        bmp->Crop((int)scene->beginPoint.x(), (int)scene->beginPoint.y(), (int)scene->endPoint.x(), (int)scene->endPoint.y());
+        drawRaster();
+    }
+
+    if(circle_flag){
+        bmp->Circle((int)scene->beginPoint.x(), (int)scene->beginPoint.y(), (int)sqrt(pow(scene->endPoint.x() - scene->beginPoint.x(),2)
+                                                                       +pow(scene->endPoint.y() - scene->beginPoint.y(), 2)), scene->color);
         drawRaster();
     }
 }
@@ -124,6 +139,7 @@ void MainWindow::on_pushButton_clicked()
     draw_flag = true;
     invert_flag = false;
     crop_flag = false;
+    circle_flag = false;
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -134,6 +150,7 @@ void MainWindow::on_pushButton_2_clicked()
     draw_flag = false;
     invert_flag = true;
     crop_flag = false;
+    circle_flag = false;
 }
 
 void MainWindow::on_pushButton_3_clicked()
@@ -141,4 +158,13 @@ void MainWindow::on_pushButton_3_clicked()
     draw_flag = false;
     invert_flag = false;
     crop_flag = true;
+    circle_flag = false;
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    draw_flag = false;
+    invert_flag = false;
+    crop_flag = false;
+    circle_flag = true;
 }

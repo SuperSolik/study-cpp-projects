@@ -37,6 +37,7 @@ private:
     bool draw_flag = false;
     bool invert_flag = false;
     bool crop_flag = false;
+    bool circle_flag = false;
 
 
 private:
@@ -57,6 +58,7 @@ private slots:
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
+    void on_pushButton_4_clicked();
 };
 
 #endif // MAINWINDOW_H
