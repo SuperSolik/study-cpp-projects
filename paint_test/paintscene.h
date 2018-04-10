@@ -3,11 +3,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-#include <QTimer>
-#include <QDebug>
 #include <QColor>
-#include <QPainter>
-#include <QImage>
 
 class paintScene : public QGraphicsScene
 {

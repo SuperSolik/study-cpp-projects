@@ -8,7 +8,9 @@
 #include <QMessageBox>
 #include <cstdio>
 #include <cstdlib>
+#include <algorithm>
 
+#include <QDebug>
 class BMP_ui:public QObject
 {
     Q_OBJECT

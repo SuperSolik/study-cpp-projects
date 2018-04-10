@@ -46,8 +46,13 @@ void MainWindow::resizeEvent(QResizeEvent *event){
 void MainWindow::resize(int x, int y){
     ui->graphicsView->resize(x + 10, y + 10);
     scene->setSceneRect(0, 0, x, y);
-    ui->splitter->resize(ui->graphicsView->width() + ui->groupBox->width(), ui->graphicsView->height());
-    MainWindow::setGeometry(MainWindow::x(), MainWindow::y(), ui->splitter->width() + 5, ui->splitter->height()+40);
+    if(y > 230){
+        ui->splitter->resize(ui->graphicsView->width() + ui->groupBox->width(), ui->graphicsView->height());
+    }
+    else{
+        ui->splitter->resize(ui->graphicsView->width() + ui->groupBox->width(), 230);
+    }
+    //MainWindow::setGeometry(MainWindow::x(), MainWindow::y(), ui->splitter->width() + 5, ui->splitter->height()+40);
 }
 
 void MainWindow::drawRaster(){
@@ -78,7 +83,9 @@ void MainWindow::Action(){
     }
     if(crop_flag){
         bmp->Crop((int)scene->beginPoint.x(), (int)scene->beginPoint.y(), (int)scene->endPoint.x(), (int)scene->endPoint.y());
+        scene->clear();
         drawRaster();
+        resize(bmp->b_info.biWidth, bmp->b_info.biHeight);
     }
 
     if(circle_flag){
@@ -134,8 +141,6 @@ void MainWindow::on_actionSize_triggered()
 
 void MainWindow::on_pushButton_clicked()
 {
-    /*bmp->DrawLine(scene->beginPoint.x(), scene->beginPoint.y(), scene->endPoint.x(), scene->endPoint.y(), scene->color, scene->size_l);
-    drawRaster();*/
     draw_flag = true;
     invert_flag = false;
     crop_flag = false;
@@ -144,9 +149,6 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    /*bmp->Invert((int)scene->beginPoint.x(), (int)scene->beginPoint.y(), (int)sqrt(pow(scene->endPoint.x() - scene->beginPoint.x(),2)
-                                                                   +pow(scene->endPoint.y() - scene->beginPoint.y(), 2)));
-    drawRaster();*/
     draw_flag = false;
     invert_flag = true;
     crop_flag = false;

@@ -256,26 +256,40 @@ void BMP_ui::Invert(int x1, int y1, int r){
 }
 
 void BMP_ui::Crop(int x1, int y1, int x2, int y2){
-    int t;
-    int t2;
-    if(x1 > x2 && y1 < y2){
-        t = x1;
-        x1 = x2;
-        x2 = t;
+    int begin_x = std::min(x1, x2);
+    int begin_y = std::min(y1, y2);
+    int end_x = std::max(x1, x2);
+    int end_y = std::max(y1, y2);
+    int temp_w = end_x - begin_x;
+    int temp_h = end_y - begin_y;
+    RGBTriple** buffer = (RGBTriple**)malloc(temp_h*sizeof(RGBTriple*));
+    for(int i = 0; i < temp_h; i++)
+       buffer[i] = (RGBTriple*)malloc(temp_w*sizeof(RGBTriple));
+    int i = 0, j = 0;
+    for(int y  = begin_y; y < end_y; y++){
+        for(int x  = begin_x; x < end_x; x++){
+            buffer[i][j].rgbBlue = pixels[y][x].rgbBlue;
+            buffer[i][j].rgbGreen = pixels[y][x].rgbGreen;
+            buffer[i][j].rgbRed = pixels[y][x].rgbRed;
+            j++;
+        }
+        j = 0;
+        i++;
     }
-    if(x1 < x2 && y1 > y2){
-        t = y1;
-        y1 = y2;
-        y2 = t;
+    b_info.biWidth = temp_w;
+    b_info.biHeight = temp_h;
+    pixels = (RGBTriple**)realloc(pixels, b_info.biHeight*sizeof(RGBTriple*));
+    for(unsigned int i = 0; i < b_info.biHeight; i++){
+        pixels[i] = (RGBTriple*)realloc(pixels[i], b_info.biWidth*sizeof(RGBTriple));
     }
-    if(x1 > x2 && y1 > y2){
-        t2 = y1;
-        y1 = y2;
-        y2 = t2;
-        t = x1;
-        x1 = x2;
-        x2 = t;
+    for(unsigned int y  = 0; y < b_info.biHeight; y++){
+        for(unsigned int x  = 0; x < b_info.biWidth; x++){
+            pixels[y][x] = buffer[y][x];
+        }
     }
+    //b_info.biWidth = temp_w;
+    //b_info.biHeight = temp_h;
+    for(int i = 0; i < temp_h; i++)
+       free(buffer[i]);
+    free(buffer);
 }
-
-
