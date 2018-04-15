@@ -14,8 +14,8 @@
    <string>Graphics</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resourses.qrc">
-    <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
+   <iconset resource="resources.qrc">
+    <normaloff>:/images/icon2.png</normaloff>:/images/icon2.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QSplitter" name="splitter">
@@ -23,8 +23,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>741</width>
-      <height>451</height>
+      <width>561</width>
+      <height>231</height>
      </rect>
     </property>
     <property name="orientation">
@@ -46,7 +46,7 @@
      <property name="title">
       <string/>
      </property>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="drawButton">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -56,10 +56,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>DrawLine</string>
+       <string>Line</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="invButton">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -72,7 +72,7 @@
        <string>Invert</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="cropButton">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -85,7 +85,7 @@
        <string>Crop</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="circleButton">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -95,7 +95,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>DrawCircle</string>
+       <string>Circle</string>
       </property>
      </widget>
     </widget>
@@ -127,13 +127,14 @@
     <addaction name="actionSave"/>
     <addaction name="actionSave_As"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
+   <widget class="QMenu" name="menuInfo">
     <property name="title">
      <string>Info</string>
     </property>
+    <addaction name="actionShowData"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
+   <addaction name="menuInfo"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -193,10 +194,15 @@
     <string>Size</string>
    </property>
   </action>
+  <action name="actionShowData">
+   <property name="text">
+    <string>ShowData</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="resourses.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

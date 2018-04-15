@@ -16,10 +16,6 @@ void paintScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     beginPoint = event->scenePos();
 }
 
-void paintScene::mouseMoveEvent(QGraphicsSceneMouseEvent * event){
-    endPoint = event->scenePos();
-}
-
 void paintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     endPoint = event->scenePos();

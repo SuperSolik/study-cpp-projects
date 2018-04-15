@@ -30,14 +30,14 @@ public:
 
     struct BITMAPinfo{
         unsigned long  biSize;
-        unsigned long  biWidth;
-        unsigned long  biHeight;
+        long  biWidth;
+        long  biHeight;
         unsigned short biPlanes;
         unsigned short biBitCount;
         unsigned long  biCompression;
         unsigned long  biSizeImage;
-        unsigned long  biXPelsPerMeter;
-        unsigned long  biYPelsPerMeter;
+        long  biXPelsPerMeter;
+        long  biYPelsPerMeter;
         unsigned long  biClrUsed;
         unsigned long  biClrImportant;
     };
@@ -59,7 +59,7 @@ public:
 
 
 public:
-    void resizeRaster(unsigned int new_x, unsigned int new_y, int old_x, int old_y);
+    void resizeRaster(int new_x, int new_y, int old_x, int old_y);
     void Load(QString filename);
     void Save(QString filename);
     void DrawLine(int x1, int y1, int x2, int y2, QColor color, int w);

@@ -13,6 +13,7 @@
 #include <cmath>
 
 #include "paintscene.h"
+#include "info.h"
 #include "bmp_ui.h"
 
 namespace Ui {
@@ -33,6 +34,7 @@ private:
     QString filename;
     paintScene *scene;
     BMP_ui* bmp;
+    Info* data = new Info();
 
     bool draw_flag = false;
     bool invert_flag = false;
@@ -55,10 +57,11 @@ private slots:
     void on_actionClear_triggered();
     void on_actionColor_triggered();
     void on_actionSize_triggered();
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
-    void on_pushButton_3_clicked();
-    void on_pushButton_4_clicked();
+    void on_drawButton_clicked();
+    void on_invButton_clicked();
+    void on_cropButton_clicked();
+    void on_circleButton_clicked();
+    void on_actionShowData_triggered();
 };
 
 #endif // MAINWINDOW_H

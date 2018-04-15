@@ -6,6 +6,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    QFile styleF;
+
+    styleF.setFileName(":/files/style.css");
+    styleF.open(QFile::ReadOnly);
+    QString qssStr = styleF.readAll();
+    styleF.close();
+    qApp->setStyleSheet(qssStr);
 
     scene = new paintScene();
     ui->graphicsView->setScene(scene);
@@ -19,12 +26,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QRect rect = frameGeometry();
     rect.moveCenter(QDesktopWidget().availableGeometry().center());
     move(rect.topLeft());
-    on_actionNew_triggered();
+    bmp->New();
+    filename = "new.bmp";
     connect(scene, SIGNAL(mouse_pressed()), this, SLOT(Action()));
+    drawRaster();
 }
 
 MainWindow::~MainWindow()
 {
+    delete data;
     delete bmp;
 }
 
@@ -52,14 +62,14 @@ void MainWindow::resize(int x, int y){
     else{
         ui->splitter->resize(ui->graphicsView->width() + ui->groupBox->width(), 230);
     }
-    //MainWindow::setGeometry(MainWindow::x(), MainWindow::y(), ui->splitter->width() + 5, ui->splitter->height()+40);
+    MainWindow::setGeometry(MainWindow::x(), MainWindow::y(), ui->splitter->width() + 5, ui->splitter->height()+45);
 }
 
 void MainWindow::drawRaster(){
     QPixmap image(bmp->b_info.biWidth, bmp->b_info.biHeight);
     QPainter painter(&image);
-    for(unsigned int y = 0; y < bmp->b_info.biHeight; y++){
-        for(unsigned int x = 0; x < bmp->b_info.biWidth; x++){
+    for(int y = 0; y < bmp->b_info.biHeight; y++){
+        for(int x = 0; x < bmp->b_info.biWidth; x++){
             painter.setPen(QColor(bmp->pixels[y][x].rgbRed, bmp->pixels[y][x].rgbGreen, bmp->pixels[y][x].rgbBlue));
             painter.drawPoint(x, y);
         }
@@ -85,7 +95,6 @@ void MainWindow::Action(){
         bmp->Crop((int)scene->beginPoint.x(), (int)scene->beginPoint.y(), (int)scene->endPoint.x(), (int)scene->endPoint.y());
         scene->clear();
         drawRaster();
-        resize(bmp->b_info.biWidth, bmp->b_info.biHeight);
     }
 
     if(circle_flag){
@@ -118,7 +127,7 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionSave_As_triggered()
 {
-    filename = QFileDialog::getSaveFileName( this,"Save As" , "","*.bmp");
+    filename = QFileDialog::getSaveFileName(this,"Save As" , "","*.bmp");
     on_actionSave_triggered();
 }
 
@@ -126,6 +135,7 @@ void MainWindow::on_actionClear_triggered()
 {
     scene->clear();
     bmp->New();
+    drawRaster();
 }
 
 void MainWindow::on_actionColor_triggered()
@@ -139,7 +149,7 @@ void MainWindow::on_actionSize_triggered()
     scene->size_l = QInputDialog::getInt(this, "ChangeSize", "Enter size: ", 0, 0, 10, 1);
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_drawButton_clicked()
 {
     draw_flag = true;
     invert_flag = false;
@@ -147,7 +157,7 @@ void MainWindow::on_pushButton_clicked()
     circle_flag = false;
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_invButton_clicked()
 {
     draw_flag = false;
     invert_flag = true;
@@ -155,7 +165,7 @@ void MainWindow::on_pushButton_2_clicked()
     circle_flag = false;
 }
 
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_cropButton_clicked()
 {
     draw_flag = false;
     invert_flag = false;
@@ -163,10 +173,24 @@ void MainWindow::on_pushButton_3_clicked()
     circle_flag = false;
 }
 
-void MainWindow::on_pushButton_4_clicked()
+void MainWindow::on_circleButton_clicked()
 {
     draw_flag = false;
     invert_flag = false;
     crop_flag = false;
     circle_flag = true;
+}
+
+void MainWindow::on_actionShowData_triggered()
+{
+    char bitcount[128];
+    sprintf(bitcount, "%d", bmp->b_info.biBitCount);
+    char b_width[128];
+    sprintf(b_width, "%ld", bmp->b_info.biWidth);
+    char b_height[128];
+    sprintf(b_height, "%ld", bmp->b_info.biHeight);
+    char b_size[128];
+    sprintf(b_size, "%ld", bmp->b_header.bfSize);
+    data->setData(bitcount, b_width, b_height, b_size);
+    data->show();
 }
