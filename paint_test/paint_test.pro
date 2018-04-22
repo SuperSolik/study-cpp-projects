@@ -27,13 +27,18 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     paintscene.cpp \
-    bmp_ui.cpp
+    bmp_ui.cpp \
+    info.cpp
 
 HEADERS += \
         mainwindow.h \
     paintscene.h \
     bmp_ui.h \
-    bmpstruct.h
+    info.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    info.ui
+
+RESOURCES += \
+    resources.qrc
