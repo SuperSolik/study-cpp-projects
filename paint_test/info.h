@@ -19,7 +19,7 @@ public:
     explicit Info(QWidget *parent = 0);
     ~Info();
 public:
-    void setData(char* bitcount, char* width, char* height, char* size);
+    void setData(int bitcount, int width, int height, int size, int x_pix_per_m, int y_pix_per_m);
 
 private:
     Ui::Info *ui;

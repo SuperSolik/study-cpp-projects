@@ -183,14 +183,11 @@ void MainWindow::on_circleButton_clicked()
 
 void MainWindow::on_actionShowData_triggered()
 {
-    char bitcount[128];
-    sprintf(bitcount, "%d", bmp->b_info.biBitCount);
-    char b_width[128];
-    sprintf(b_width, "%ld", bmp->b_info.biWidth);
-    char b_height[128];
-    sprintf(b_height, "%ld", bmp->b_info.biHeight);
-    char b_size[128];
-    sprintf(b_size, "%ld", bmp->b_header.bfSize);
-    data->setData(bitcount, b_width, b_height, b_size);
+    data->setData(bmp->b_info.biBitCount,
+                  bmp->b_info.biWidth,
+                  bmp->b_info.biHeight,
+                  bmp->b_header.bfSize,
+                  bmp->b_info.biXPelsPerMeter,
+                  bmp->b_info.biYPelsPerMeter);
     data->show();
 }

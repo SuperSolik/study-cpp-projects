@@ -7,12 +7,15 @@ BMP_ui::BMP_ui(unsigned int x, unsigned int y)
      b_info.biWidth = x;
      b_header.b1 = 'B';
      b_header.b2 = 'M';
-     b_header.bfSize = sizeof(BMPheader)+sizeof(BITMAPinfo)+3*b_info.biWidth*b_info.biHeight + 3*b_info.biHeight*(4 - b_info.biWidth*3/4);
+     b_header.bfSize = sizeof(BMPheader) +
+                     sizeof(BITMAPinfo)+
+                     3*b_info.biWidth*b_info.biHeight +
+                     3*b_info.biHeight*((4 - b_info.biWidth*3%4)%4);
      b_header.bfOffBits = 54;
      b_info.biPlanes = 1;
      b_info.biBitCount = 24;
-     b_info.biXPelsPerMeter = 3780;
-     b_info.biYPelsPerMeter = 3780;
+     b_info.biXPelsPerMeter = 0;
+     b_info.biYPelsPerMeter = 0;
      pixels = (RGBTriple**)malloc(b_info.biHeight*sizeof(RGBTriple*));
      for(int i = 0; i < b_info.biHeight; i++)
         pixels[i] = (RGBTriple*)malloc(b_info.biWidth*sizeof(RGBTriple));
@@ -23,16 +26,6 @@ BMP_ui::~BMP_ui(){
         free(pixels[i]);
     }
     free(pixels);
-}
-
-void resizeRaster(int new_x, int new_y, int old_x, int old_y){
-    /*b_info.biHeight = new_y;
-    b_info.biWidth = new_x;
-    pixels = (RGBTriple**)realloc(pixels, b_info.biHeight*sizeof(RGBTriple*));
-    for(unsigned int i = old_y; i < b_info.biHeight; i++)
-        pixels[i] = (RGBTriple*)malloc(b_info.biWidth*sizeof(RGBTriple));
-    for(unsigned int i = 0; i < b_info.biHeight; i++)
-        pixels[i] = (RGBTriple*)realloc(pixels[i], b_info.biWidth*sizeof(RGBTriple));*/
 }
 
 void BMP_ui::New(){
@@ -65,7 +58,7 @@ void BMP_ui::Load(QString filename){
 
     int padding = 0;
     if((b_info.biWidth * 3) % 4 != 0){
-        padding = 4 - (b_info.biWidth * 3) % 4;
+        padding = (4 - (b_info.biWidth * 3) % 4)%4;
     }
 
     b_info.biXPelsPerMeter = 3780;
@@ -99,7 +92,8 @@ void BMP_ui::Save(QString filename){
 
     int padding = 0;
     if((b_info.biWidth * 3) % 4 != 0){
-        padding = (b_info.biWidth * 3) % 4;
+        padding = (4 - (b_info.biWidth * 3) % 4)%4;
+
     }
 
     BMPheader save_header;
@@ -110,12 +104,14 @@ void BMP_ui::Save(QString filename){
     save_header.b2 = 'M';
     save_header.bfOffBits = sizeof(BMPheader) + sizeof(BITMAPinfo);
     save_header.bfSize = save_header.bfOffBits + 3*b_info.biHeight*b_info.biWidth + 3*b_info.biHeight*padding;
+    save_info.biSize = sizeof(BITMAPinfo);
+    save_info.biSizeImage = 0;
     save_info.biBitCount = 24;
     save_info.biSize = sizeof(BITMAPinfo);
     save_info.biHeight = b_info.biHeight;
     save_info.biWidth = b_info.biWidth;
-    save_info.biXPelsPerMeter = 3780;
-    save_info.biYPelsPerMeter = 3780;
+    save_info.biXPelsPerMeter = 0;
+    save_info.biYPelsPerMeter = 0;
 
     fwrite(&save_header, sizeof(save_header), 1, file);
     fwrite(&save_info, sizeof(save_info), 1, file);
@@ -155,8 +151,6 @@ void BMP_ui::DrawLine(int x1, int y1, int x2, int y2, QColor color, int w){
     int x = x1, y = y1;
     if(sign == -1){
         while(x != x2 || y != y2){
-            //if(x >= b_info.biWidth - 1 || y >= b_info.biHeight - 1) break;
-            //if(x < 0 || y < 0) break;
             if(w < 1){
                 pixels[y][x].rgbBlue = static_cast<char>(color.blue());
                 pixels[y][x].rgbGreen = static_cast<char>(color.green());
@@ -172,8 +166,6 @@ void BMP_ui::DrawLine(int x1, int y1, int x2, int y2, QColor color, int w){
     }
     else{
         while(x != x2 || y != y2){
-            //if(x >= b_info.biWidth - 1 || y >= b_info.biHeight - 1) break;
-            //if(x < 0 || y < 0) break;
             if(w < 1){
                 pixels[y][x].rgbBlue = static_cast<char>(color.blue());
                 pixels[y][x].rgbGreen = static_cast<char>(color.green());
