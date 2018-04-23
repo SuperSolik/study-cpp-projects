@@ -2,15 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QApplication>
-#include <QWidget>
 #include <QTimer>
 #include <QResizeEvent>
 #include <QFileDialog>
 #include <QColorDialog>
 #include <QInputDialog>
 #include <QDesktopWidget>
-#include <cmath>
 
 #include "paintscene.h"
 #include "info.h"

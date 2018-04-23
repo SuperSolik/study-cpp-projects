@@ -1,5 +1,6 @@
 #include "bmp_ui.h"
-BMP_ui::BMP_ui(unsigned int x, unsigned int y)
+
+BMP_ui::BMP_ui(int x, int y)
 {
      memset(&b_header, 0,  sizeof(b_header));
      memset(&b_info, 0,  sizeof(b_info));
@@ -7,10 +8,7 @@ BMP_ui::BMP_ui(unsigned int x, unsigned int y)
      b_info.biWidth = x;
      b_header.b1 = 'B';
      b_header.b2 = 'M';
-     b_header.bfSize = sizeof(BMPheader) +
-                     sizeof(BITMAPinfo)+
-                     3*b_info.biWidth*b_info.biHeight +
-                     3*b_info.biHeight*((4 - b_info.biWidth*3%4)%4);
+     b_header.bfSize = sizeof(BMPheader)+sizeof(BITMAPinfo)+3*b_info.biWidth*b_info.biHeight + 3*b_info.biHeight*PADDING(b_info.biWidth);
      b_header.bfOffBits = 54;
      b_info.biPlanes = 1;
      b_info.biBitCount = 24;
@@ -50,21 +48,19 @@ void BMP_ui::Load(QString filename){
 
     fread(&b_header, sizeof(BMPheader), 1, file);
     fread(&b_info, sizeof(BITMAPinfo), 1, file);
+    if(b_header.b1 != 'B' && b_header.b2 != 'M'){
+        QMessageBox::information(0, "Error", "Not a bmp file");
+        return;
+    }
 
     if(b_info.biBitCount != 24){
         QMessageBox::information(0, "Error", "Invalid bitcount");
         return;
     }
 
-    int padding = 0;
-    if((b_info.biWidth * 3) % 4 != 0){
-        padding = (4 - (b_info.biWidth * 3) % 4)%4;
-    }
+    b_info.biXPelsPerMeter = 0;
+    b_info.biYPelsPerMeter = 0;
 
-    b_info.biXPelsPerMeter = 3780;
-    b_info.biYPelsPerMeter = 3780;
-
-    //resizeRaster(b_info.biWidth, b_info.biHeight, old_w, old_h);
     pixels = (RGBTriple**)realloc(pixels, b_info.biHeight*sizeof(RGBTriple*));
     for(int i = old_y; i < b_info.biHeight; i++){
         pixels[i] = (RGBTriple*)malloc(b_info.biWidth*sizeof(RGBTriple));
@@ -77,10 +73,8 @@ void BMP_ui::Load(QString filename){
         for(int x = 0; x < b_info.biWidth; x++){
             fread(&pixels[y][x], sizeof(RGBTriple), 1, file);
         }
-        if(padding != 0){
-            char temp;
-            fread(&temp, 1, padding, file);
-        }
+        char temp;
+        fread(&temp, 1, PADDING(b_info.biWidth), file);
     }
     fclose(file);
 }
@@ -90,12 +84,6 @@ void BMP_ui::Save(QString filename){
     char* fname = temp.data();
     FILE* file = fopen(fname, "w+b");
 
-    int padding = 0;
-    if((b_info.biWidth * 3) % 4 != 0){
-        padding = (4 - (b_info.biWidth * 3) % 4)%4;
-
-    }
-
     BMPheader save_header;
     memset(&save_header, 0, sizeof(save_header));
     BITMAPinfo save_info;
@@ -103,15 +91,14 @@ void BMP_ui::Save(QString filename){
     save_header.b1 = 'B';
     save_header.b2 = 'M';
     save_header.bfOffBits = sizeof(BMPheader) + sizeof(BITMAPinfo);
-    save_header.bfSize = save_header.bfOffBits + 3*b_info.biHeight*b_info.biWidth + 3*b_info.biHeight*padding;
+    save_header.bfSize = save_header.bfOffBits + 3*b_info.biHeight*b_info.biWidth + 3*b_info.biHeight*PADDING(b_info.biWidth);
     save_info.biSize = sizeof(BITMAPinfo);
-    save_info.biSizeImage = 0;
     save_info.biBitCount = 24;
     save_info.biSize = sizeof(BITMAPinfo);
     save_info.biHeight = b_info.biHeight;
     save_info.biWidth = b_info.biWidth;
-    save_info.biXPelsPerMeter = 0;
-    save_info.biYPelsPerMeter = 0;
+    save_info.biXPelsPerMeter = 3780;
+    save_info.biYPelsPerMeter = 3780;
 
     fwrite(&save_header, sizeof(save_header), 1, file);
     fwrite(&save_info, sizeof(save_info), 1, file);
@@ -120,10 +107,8 @@ void BMP_ui::Save(QString filename){
         for(int x = 0; x < b_info.biWidth; x++){
             fwrite(&pixels[y][x], sizeof(RGBTriple), 1, file);
             }
-        if(padding != 0){
-            char temp = 0;
-            fwrite(&temp, 1, padding, file);
-        }
+        char temp = 0;
+        fwrite(&temp, 1, PADDING(b_info.biWidth), file);
     }
     fclose(file);
 }

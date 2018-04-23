@@ -6,8 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QFile styleF;
 
+    QFile styleF;
     styleF.setFileName(":/files/style.css");
     styleF.open(QFile::ReadOnly);
     QString qssStr = styleF.readAll();
@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete scene;
     delete data;
     delete bmp;
 }
@@ -41,11 +42,6 @@ MainWindow::~MainWindow()
 void MainWindow::slotTimer(){
     timer->stop();
     scene->setSceneRect(0, 0, ui->graphicsView->width() - 10,  ui->graphicsView->height() - 10);
-    /*bmp->resizeRaster(ui->graphicsView->width(),
-                      ui->graphicsView->height(),
-                      bmp->b_info.biWidth,
-                      bmp->b_info.biHeight);*/
-    //drawRaster();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event){
@@ -184,10 +180,10 @@ void MainWindow::on_circleButton_clicked()
 void MainWindow::on_actionShowData_triggered()
 {
     data->setData(bmp->b_info.biBitCount,
-                  bmp->b_info.biWidth,
-                  bmp->b_info.biHeight,
-                  bmp->b_header.bfSize,
-                  bmp->b_info.biXPelsPerMeter,
-                  bmp->b_info.biYPelsPerMeter);
+                      bmp->b_info.biWidth,
+                      bmp->b_info.biHeight,
+                      bmp->b_header.bfSize,
+                      bmp->b_info.biXPelsPerMeter,
+                      bmp->b_info.biYPelsPerMeter);
     data->show();
 }

@@ -1,16 +1,15 @@
 #ifndef BMP_UI_H
 #define BMP_UI_H
 
-#include <QImage>
 #include <QString>
 #include <QPainter>
 #include <QPixmap>
 #include <QMessageBox>
-#include <cstdio>
 #include <cstdlib>
-#include <algorithm>
+#include <algorithm> // for min and max
 
-#include <QDebug>
+#define PADDING(x) ((4 - ((x*3)%4))%4)
+
 class BMP_ui:public QObject
 {
     Q_OBJECT
@@ -54,7 +53,7 @@ public:
     RGBTriple** pixels;
 
 public:
-    BMP_ui(unsigned int x, unsigned int y);
+    BMP_ui(int x, int y);
     ~BMP_ui();
 
 

@@ -2,11 +2,8 @@
 #define INFO_H
 
 #include <QWidget>
-#include <QMainWindow>
-#include <QApplication>
 #include <QString>
-#include <QDebug>
-#include <QVBoxLayout>
+#include <QFile>
 
 namespace Ui{
 class Info;

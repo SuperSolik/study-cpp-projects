@@ -61,3 +61,20 @@ QPushButton#circleButton:pressed {
 QGraphicsView#graphicsView {
     background-color: #c2c4c7;
 }
+
+QToolBar#mainToolBar {
+    background-color: rgb(255, 255, 255);
+}
+
+QGroupBox#groupBox {
+    background-color: rgb(255, 255, 255);
+}
+
+QTextBrowser#textBrowser {
+    font-size: 16px;
+    color: rgb(1, 1, 1);
+    background-color: rgb(255, 255, 255);
+
+}
+
+
