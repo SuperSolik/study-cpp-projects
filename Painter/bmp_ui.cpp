@@ -1,5 +1,4 @@
 #include "bmp_ui.h"
-#include "QDebug"
 
 BMP_ui::BMP_ui(int x, int y){
     memset(&b_header, 0,  sizeof(b_header));
@@ -14,7 +13,6 @@ BMP_ui::BMP_ui(int x, int y){
     b_info.biBitCount = 24;
     b_info.biXPelsPerMeter = 0;
     b_info.biYPelsPerMeter = 0;
-
     pixels = new RGBTriple* [b_info.biHeight];
     for(int i = 0; i < b_info.biHeight; i++){
         pixels[i] = new RGBTriple[b_info.biWidth];
@@ -319,5 +317,5 @@ void BMP_ui::Crop(int x1, int y1, int x2, int y2){
     b_info.biHeight = temp_h;
     for(int i = 0; i < temp_h; i++)
        delete [] buffer[i];
-    delete buffer;
+    delete [] buffer;
 }

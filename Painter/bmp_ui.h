@@ -5,9 +5,8 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QMessageBox>
-#include <cstdlib>
 #include <algorithm> // for min and max
-#include <fstream>
+#include <fstream> //open and write
 
 #define PADDING(x) ((4 - ((x*3)%4))%4)
 
