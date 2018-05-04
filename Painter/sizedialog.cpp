@@ -14,7 +14,7 @@ SizeDialog::~SizeDialog(){
 }
 
 void SizeDialog::on_okButton_clicked(){
-    emit start_size(ui->wBox->value(), ui->hBox->value());
+    emit get_size(ui->wBox->value(), ui->hBox->value());
     SizeDialog::closeEvent(0);
 }
 

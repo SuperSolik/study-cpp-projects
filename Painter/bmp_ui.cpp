@@ -10,6 +10,7 @@ BMP_ui::BMP_ui(int x, int y){
     b_header.bfSize = sizeof(BMPheader)+sizeof(BITMAPinfo)+3*b_info.biWidth*b_info.biHeight + 3*b_info.biHeight*PADDING(b_info.biWidth);
     b_header.bfOffBits = 54;
     b_info.biPlanes = 1;
+    b_info.biSize = sizeof(BITMAPinfo);
     b_info.biBitCount = 24;
     b_info.biXPelsPerMeter = 0;
     b_info.biYPelsPerMeter = 0;
@@ -26,7 +27,7 @@ BMP_ui::~BMP_ui(){
     delete [] pixels;
 }
 
-void BMP_ui::New(){
+void BMP_ui::Clear(){
     for(int y = 0; y < b_info.biHeight; y++){
         for(int x = 0; x < b_info.biWidth; x++){
             pixels[y][x].rgbBlue = 255;
@@ -90,10 +91,8 @@ void BMP_ui::Save(QString filename){
         return;
     }
     BMPheader save_header;
-    memset(&save_header, 0, sizeof(save_header));
     BITMAPinfo save_info;
-    memset(&save_info, 0, sizeof(save_info));
-    save_header.b1 = 'B';
+    /*save_header.b1 = 'B';
     save_header.b2 = 'M';
     save_header.bfOffBits = sizeof(BMPheader) + sizeof(BITMAPinfo);
     save_header.bfSize = save_header.bfOffBits + 3*b_info.biHeight*b_info.biWidth + 3*b_info.biHeight*PADDING(b_info.biWidth);
@@ -102,7 +101,9 @@ void BMP_ui::Save(QString filename){
     save_info.biHeight = b_info.biHeight;
     save_info.biWidth = b_info.biWidth;
     save_info.biXPelsPerMeter = 0;
-    save_info.biYPelsPerMeter = 0;
+    save_info.biYPelsPerMeter = 0;*/
+    mempcpy(&save_header, &b_header, sizeof(BMPheader));
+    mempcpy(&save_info, &b_info, sizeof(BITMAPinfo));
 
     file.write(reinterpret_cast<char*>(&save_header), sizeof(BMPheader));
     file.write(reinterpret_cast<char*>(&save_info), sizeof(BITMAPinfo));
@@ -190,58 +191,6 @@ void BMP_ui::FillCircle(int x1, int y1, int r, QColor color){
                 pixels[i][j].rgbRed = static_cast<unsigned char>(color.red());
             }
         }
-    }
-}
-
-void BMP_ui::Circle(int x1, int y1, int r, QColor color){
-    if(x1 > b_info.biWidth - 1 || y1 > b_info.biHeight - 1 || x1 < 0 || y1 < 0){
-        QMessageBox::information(0, "Error", "Wrong coordinates, try again");
-        return;
-    }
-
-    int valuey;
-    int valuex;
-    int x = 0;
-    int y = r;
-    int delta = 1 - 2 * r;
-    int error = 0;
-    while (y >= 0){
-        valuex = x1-x;
-        valuey = y1-y;
-        if(valuex < 0) valuex = 0;
-        if(valuey < 0) valuey = 0;
-        pixels[valuey][valuex].rgbBlue = static_cast<unsigned char>(color.blue());
-        pixels[valuey][valuex].rgbGreen = static_cast<unsigned char>(color.green());
-        pixels[valuey][valuex].rgbRed = static_cast<unsigned char>(color.red());
-        valuey = y1+y;
-        if(valuey > static_cast<int>(b_info.biHeight - 1)) valuey = b_info.biHeight - 1;
-        pixels[valuey][valuex].rgbBlue = static_cast<unsigned char>(color.blue());
-        pixels[valuey][valuex].rgbGreen = static_cast<unsigned char>(color.green());
-        pixels[valuey][valuex].rgbRed = static_cast<char>(color.red());
-        valuex = x1+x;
-        if(valuex > static_cast<int>(b_info.biWidth - 1)) valuex = b_info.biWidth - 1;
-        pixels[valuey][valuex].rgbBlue = static_cast<unsigned char>(color.blue());
-        pixels[valuey][valuex].rgbGreen = static_cast<unsigned char>(color.green());
-        pixels[valuey][valuex].rgbRed = static_cast<unsigned char>(color.red());
-        valuey = y1-y;
-        if(valuey < 0) valuey = 0;
-        pixels[valuey][valuex].rgbBlue = static_cast<unsigned char>(color.blue());
-        pixels[valuey][valuex].rgbGreen = static_cast<unsigned char>(color.green());
-        pixels[valuey][valuex].rgbRed = static_cast<unsigned char>(color.red());
-
-        error = 2 * (delta + y) - 1;
-        if ((delta < 0) && (error <= 0)){
-            delta += 2 * ++x + 1;
-            continue;
-        }
-        error = 2 * (delta - x) - 1;
-        if ((delta > 0) && (error > 0)){
-          delta += 1 - 2 * --y;
-          continue;
-        }
-        x++;
-        delta += 2 * (x - y);
-        y--;
     }
 }
 

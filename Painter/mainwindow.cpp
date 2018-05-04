@@ -7,13 +7,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QFile styleF;
-    styleF.setFileName(":/files/style.css");
-    styleF.open(QFile::ReadOnly);
-    QString qssStr = styleF.readAll();
-    styleF.close();
-    qApp->setStyleSheet(qssStr);
-
+    QRect rect = frameGeometry();
+    rect.moveCenter(QDesktopWidget().availableGeometry().center());
+    move(rect.topLeft());
     scene = new paintScene();
     ui->graphicsView->setScene(scene);
     this->setCentralWidget(ui->splitter);
@@ -23,9 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("BMP_DRAWING");
     data = new Info();
     filename = "new.bmp";
-    connect(scene, SIGNAL(mouse_pressed()), this, SLOT(Action()));
+    connect(scene, SIGNAL(mouse_pressed(QPointF, QPointF)), this, SLOT(Action(QPointF, QPointF)));
     start_dialog = new SizeDialog();
-    connect(start_dialog, SIGNAL(start_size(int, int)), this, SLOT(set_start(int, int)));
+    connect(start_dialog, SIGNAL(get_size(int, int)), this, SLOT(Set_Size(int, int)));
     start_dialog->setWindowFlags(Qt::WindowStaysOnTopHint);
     start_dialog->show();
 }
@@ -48,7 +44,7 @@ void MainWindow::resizeEvent(QResizeEvent *event){
     QWidget::resizeEvent(event);
 }
 
-void MainWindow::set_start(int s_width, int s_height){
+void MainWindow::Set_Size(int s_width, int s_height){
     if(s_width == 0 || s_height == 0){
         start_dialog->close();
         QMessageBox::information(0, "Error", "Wrong size (can't be 0), try again");
@@ -56,40 +52,41 @@ void MainWindow::set_start(int s_width, int s_height){
     }
     int w = s_width;
     int h = s_height;
+    qDebug() << created;
+    if(created) delete bmp;
     bmp = new BMP_ui(w, h);
     MainWindow::resize(w + ui->groupBox->width() + 20, h + 60);
     created = true;
-    bmp->New();
-    QRect rect = frameGeometry();
-    rect.moveCenter(QDesktopWidget().availableGeometry().center());
-    move(rect.topLeft());
+    bmp->Clear();
     drawRaster();
+    data->setData(filename,
+                  bmp->b_info.biBitCount,
+                  bmp->b_info.biWidth,
+                  bmp->b_info.biHeight,
+                  bmp->b_header.bfSize,
+                  bmp->b_info.biXPelsPerMeter,
+                  bmp->b_info.biYPelsPerMeter);
 }
 
-void MainWindow::Action(){
+void MainWindow::Action(QPointF start, QPointF end){
     if(draw_flag){
-        bmp->DrawLine(scene->beginPoint.x(),
-                      scene->beginPoint.y(),
-                      scene->endPoint.x(),
-                      scene->endPoint.y(),
+        bmp->DrawLine(start.x(),
+                      start.y(),
+                      end.x(),
+                      end.y(),
                       scene->color,
                       scene->size_l);
         drawRaster();
     }
     if(invert_flag){
-        bmp->Invert((int)scene->beginPoint.x(), (int)scene->beginPoint.y(), (int)sqrt(pow(scene->endPoint.x() - scene->beginPoint.x(),2)
-                                                                       +pow(scene->endPoint.y() - scene->beginPoint.y(), 2)));
+        bmp->Invert(start.x(),
+                    start.y(),
+                    sqrt(pow(end.x() - start.x(),2) +pow(end.y() - start.y(), 2)));
         drawRaster();
     }
     if(crop_flag){
-        bmp->Crop((int)scene->beginPoint.x(), (int)scene->beginPoint.y(), (int)scene->endPoint.x(), (int)scene->endPoint.y());
+        bmp->Crop(start.x(), start.y(), end.x(), end.y());
         scene->clear();
-        drawRaster();
-    }
-
-    if(circle_flag){
-        bmp->Circle((int)scene->beginPoint.x(), (int)scene->beginPoint.y(), (int)sqrt(pow(scene->endPoint.x() - scene->beginPoint.x(),2)
-                                                                       +pow(scene->endPoint.y() - scene->beginPoint.y(), 2)), scene->color);
         drawRaster();
     }
 }
@@ -107,10 +104,13 @@ void MainWindow::drawRaster(){
 }
 
 void MainWindow::on_actionNew_triggered(){
+    delete start_dialog;
+    start_dialog = new SizeDialog();
+    start_dialog->setWindowFlags(Qt::WindowStaysOnTopHint);
+    connect(start_dialog, SIGNAL(get_size(int, int)), this, SLOT(Set_Size(int, int)));
+    start_dialog->show();
     scene->clear();
     filename = "new.bmp";
-    bmp->New();
-    drawRaster();
 }
 
 void MainWindow::on_actionOpen_triggered(){
@@ -118,12 +118,13 @@ void MainWindow::on_actionOpen_triggered(){
     filename = QFileDialog::getOpenFileName(this, "Open");
     bmp->Load(filename);
     drawRaster();
-    if(bmp->b_info.biHeight > 230){
-        MainWindow::resize(bmp->b_info.biWidth + ui->groupBox->width() + 20, bmp->b_info.biHeight + 60);
-    }
-    else{
-        MainWindow::resize(bmp->b_info.biWidth + ui->groupBox->width() + 20, 250);
-    }
+    data->setData(filename,
+                  bmp->b_info.biBitCount,
+                  bmp->b_info.biWidth,
+                  bmp->b_info.biHeight,
+                  bmp->b_header.bfSize,
+                  bmp->b_info.biXPelsPerMeter,
+                  bmp->b_info.biYPelsPerMeter);
 }
 
 void MainWindow::on_actionSave_triggered(){
@@ -137,7 +138,7 @@ void MainWindow::on_actionSave_As_triggered(){
 
 void MainWindow::on_actionClear_triggered(){
     scene->clear();
-    bmp->New();
+    bmp->Clear();
     drawRaster();
 }
 
@@ -154,36 +155,27 @@ void MainWindow::on_drawButton_clicked(){
     draw_flag = true;
     invert_flag = false;
     crop_flag = false;
-    circle_flag = false;
 }
 
 void MainWindow::on_invButton_clicked(){
     draw_flag = false;
     invert_flag = true;
     crop_flag = false;
-    circle_flag = false;
 }
 
 void MainWindow::on_cropButton_clicked(){
     draw_flag = false;
     invert_flag = false;
     crop_flag = true;
-    circle_flag = false;
-}
-
-void MainWindow::on_circleButton_clicked(){
-    draw_flag = false;
-    invert_flag = false;
-    crop_flag = false;
-    circle_flag = true;
 }
 
 void MainWindow::on_actionShowData_triggered(){
-    data->setData(bmp->b_info.biBitCount,
-                      bmp->b_info.biWidth,
-                      bmp->b_info.biHeight,
-                      bmp->b_header.bfSize,
-                      bmp->b_info.biXPelsPerMeter,
-                      bmp->b_info.biYPelsPerMeter);
+    data->setData(filename,
+                  bmp->b_info.biBitCount,
+                  bmp->b_info.biWidth,
+                  bmp->b_info.biHeight,
+                  bmp->b_header.bfSize,
+                  bmp->b_info.biXPelsPerMeter,
+                  bmp->b_info.biYPelsPerMeter);
     data->show(); 
 }

@@ -22,7 +22,7 @@ public:
    int size_l;
 
 signals:
-   void mouse_pressed();
+   void mouse_pressed(QPointF start, QPointF end);
 
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent * event);

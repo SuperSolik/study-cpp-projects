@@ -23,6 +23,9 @@
    <iconset resource="resources.qrc">
     <normaloff>:/images/icon2.png</normaloff>:/images/icon2.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QSplitter" name="splitter">
     <property name="geometry">
@@ -91,19 +94,6 @@
        <string>Crop</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="circleButton">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>170</y>
-        <width>61</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Circle</string>
-      </property>
-     </widget>
     </widget>
     <widget class="QGraphicsView" name="graphicsView">
      <property name="minimumSize">
@@ -111,6 +101,11 @@
        <width>100</width>
        <height>100</height>
       </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGraphicsView#graphicsView {
+    background-color: #c2c4c7;
+}</string>
      </property>
     </widget>
    </widget>
@@ -149,6 +144,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNew"/>
    <addaction name="actionClear"/>
    <addaction name="actionColor"/>
    <addaction name="actionSize"/>

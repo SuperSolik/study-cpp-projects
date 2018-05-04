@@ -61,11 +61,10 @@ public:
     void Load(QString filename);
     void Save(QString filename);
     void DrawLine(int x1, int y1, int x2, int y2, QColor color, int w);
-    void Circle(int x1, int y1, int r, QColor color);
     void FillCircle(int x1, int y1, int r, QColor color);
     void Invert(int x1, int y1, int r);
     void Crop(int x1, int y1, int x2, int y2);
-    void New();
+    void Clear();
 };
 
 #endif // BMP_UI_H

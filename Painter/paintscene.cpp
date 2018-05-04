@@ -15,5 +15,5 @@ void paintScene::mousePressEvent(QGraphicsSceneMouseEvent *event){
 
 void paintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     endPoint = event->scenePos();
-    emit mouse_pressed();
+    emit mouse_pressed(beginPoint, endPoint);
 }

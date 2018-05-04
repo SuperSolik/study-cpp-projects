@@ -37,7 +37,6 @@ private:
     bool draw_flag = false;
     bool invert_flag = false;
     bool crop_flag = false;
-    bool circle_flag = false;
     bool created = false;
 
 
@@ -46,8 +45,8 @@ private:
     void drawRaster();
 
 private slots:
-    void set_start(int s_width, int s_height);
-    void Action();
+    void Set_Size(int s_width, int s_height);
+    void Action(QPointF, QPointF);
     void slotTimer();
     void on_actionOpen_triggered();
     void on_actionNew_triggered();
@@ -59,7 +58,6 @@ private slots:
     void on_drawButton_clicked();
     void on_invButton_clicked();
     void on_cropButton_clicked();
-    void on_circleButton_clicked();
     void on_actionShowData_triggered();
 };
 

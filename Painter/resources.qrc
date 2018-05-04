@@ -4,7 +4,4 @@
         <file>icon2.png</file>
         <file>info_icon.png</file>
     </qresource>
-    <qresource prefix="/files">
-        <file>style.css</file>
-    </qresource>
 </RCC>

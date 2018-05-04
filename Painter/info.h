@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QString>
+#include <QTimer>
 
 namespace Ui{
 class Info;
@@ -14,10 +15,17 @@ public:
     explicit Info(QWidget *parent = 0);
     ~Info();
 public:
-    void setData(int bitcount, int width, int height, int size, int x_pix_per_m, int y_pix_per_m);
+    void setData(QString filename, int bitcount, int width, int height, int size, int x_pix_per_m, int y_pix_per_m);
+
+private:
+    void resizeEvent(QResizeEvent *event);
+
 
 private:
     Ui::Info *ui;
+    QTimer* timer;
+private slots:
+    void slotTimer();
 };
 
 
