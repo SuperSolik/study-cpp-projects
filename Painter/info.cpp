@@ -13,13 +13,16 @@ Info::Info(QWidget *parent) :
 }
 
 Info::~Info(){
-
+    delete ui;
+    delete timer;
 }
 
 void Info::slotTimer(){
     timer->stop();
     ui->tabWidget->resize(Info::width(), Info::height());
-    ui->textBrowser_2->resize(Info::width() - 25, Info::height() - 50);
+    ui->textBrowser_1->resize(Info::width() - 25, Info::height() - 45);
+    ui->textBrowser_2->resize(Info::width() - 25, Info::height() - 45);
+    ui->textBrowser_3->resize(Info::width() - 25, Info::height() - 45);
 }
 
 void Info::resizeEvent(QResizeEvent *event){

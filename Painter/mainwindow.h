@@ -32,12 +32,15 @@ private:
     paintScene *scene;
     BMP_ui* bmp;
     Info* data;
-    SizeDialog* start_dialog;
-
+    SizeDialog* start_dialog;    
+    QColor color = "black";
+    int size_l = 1;
     bool draw_flag = false;
     bool invert_flag = false;
     bool crop_flag = false;
     bool created = false;
+    bool created_new = false;
+    bool error = false;
 
 
 private:
@@ -46,7 +49,7 @@ private:
 
 private slots:
     void Set_Size(int s_width, int s_height);
-    void Action(QPointF, QPointF);
+    void Action(QPointF start, QPointF end);
     void slotTimer();
     void on_actionOpen_triggered();
     void on_actionNew_triggered();

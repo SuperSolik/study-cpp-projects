@@ -17,10 +17,6 @@ public:
    QPointF beginPoint;
    QPointF endPoint;
 
-public:
-   QColor color;
-   int size_l;
-
 signals:
    void mouse_pressed(QPointF start, QPointF end);
 

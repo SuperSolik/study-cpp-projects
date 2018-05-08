@@ -17,7 +17,6 @@ public:
 
 private:
     Ui::SizeDialog *ui;
-    QTimer* timer;
 
 signals:
     get_size(int width, int height);

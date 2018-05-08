@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow(){
+    delete ui;
     delete scene;
     delete data;
     delete start_dialog;
@@ -36,7 +37,11 @@ MainWindow::~MainWindow(){
 
 void MainWindow::slotTimer(){
     timer->stop();
-    scene->setSceneRect(0, 0, ui->graphicsView->width() - 10,  ui->graphicsView->height() - 10);
+    if(bmp->b_info.biWidth >= ui->graphicsView->width() ||
+       bmp->b_info.biHeight >= ui->graphicsView->height()){
+        scene->setSceneRect(0, 0, bmp->b_info.biWidth - 10,  bmp->b_info.biHeight - 10);
+    }
+    else scene->setSceneRect(0, 0, ui->graphicsView->width() - 10,  ui->graphicsView->height() - 10);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event){
@@ -45,17 +50,12 @@ void MainWindow::resizeEvent(QResizeEvent *event){
 }
 
 void MainWindow::Set_Size(int s_width, int s_height){
-    if(s_width == 0 || s_height == 0){
-        start_dialog->close();
-        QMessageBox::information(0, "Error", "Wrong size (can't be 0), try again");
-        qApp->exit(0);
+    if(created){
+        delete bmp;
+        created_new = true;
     }
-    int w = s_width;
-    int h = s_height;
-    qDebug() << created;
-    if(created) delete bmp;
-    bmp = new BMP_ui(w, h);
-    MainWindow::resize(w + ui->groupBox->width() + 20, h + 60);
+    bmp = new BMP_ui(s_width, s_height);
+    MainWindow::resize(s_width + ui->groupBox->width() + 20, s_height + 60);
     created = true;
     bmp->Clear();
     drawRaster();
@@ -74,8 +74,8 @@ void MainWindow::Action(QPointF start, QPointF end){
                       start.y(),
                       end.x(),
                       end.y(),
-                      scene->color,
-                      scene->size_l);
+                      color,
+                      size_l);
         drawRaster();
     }
     if(invert_flag){
@@ -104,13 +104,9 @@ void MainWindow::drawRaster(){
 }
 
 void MainWindow::on_actionNew_triggered(){
-    delete start_dialog;
-    start_dialog = new SizeDialog();
-    start_dialog->setWindowFlags(Qt::WindowStaysOnTopHint);
-    connect(start_dialog, SIGNAL(get_size(int, int)), this, SLOT(Set_Size(int, int)));
     start_dialog->show();
-    scene->clear();
-    filename = "new.bmp";
+    if(created_new) filename = "new.bmp";
+    created_new = false;
 }
 
 void MainWindow::on_actionOpen_triggered(){
@@ -133,7 +129,7 @@ void MainWindow::on_actionSave_triggered(){
 
 void MainWindow::on_actionSave_As_triggered(){
     filename = QFileDialog::getSaveFileName(this,"Save As" , "","*.bmp");
-    on_actionSave_triggered();
+    bmp->Save(filename);
 }
 
 void MainWindow::on_actionClear_triggered(){
@@ -143,12 +139,11 @@ void MainWindow::on_actionClear_triggered(){
 }
 
 void MainWindow::on_actionColor_triggered(){
-   scene->color = QColorDialog::getColor(Qt::white, this, "Pick color");
+    color = QColorDialog::getColor(Qt::white, this, "Pick color");
 }
 
-
 void MainWindow::on_actionSize_triggered(){
-    scene->size_l = QInputDialog::getInt(this, "ChangeSize", "Enter size: ", 0, 0, 10, 1);
+    size_l = QInputDialog::getInt(this, "ChangeSize", "Enter size: ", 0, 0, 10, 1);
 }
 
 void MainWindow::on_drawButton_clicked(){

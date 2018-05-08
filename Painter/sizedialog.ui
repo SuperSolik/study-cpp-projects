@@ -58,6 +58,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
         <property name="maximum">
          <number>1920</number>
         </property>
@@ -98,6 +101,9 @@
           <width>91</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="minimum">
+         <number>1</number>
         </property>
         <property name="maximum">
          <number>1080</number>

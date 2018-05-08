@@ -2,8 +2,6 @@
 #define BMP_UI_H
 
 #include <QString>
-#include <QPainter>
-#include <QPixmap>
 #include <QMessageBox>
 #include <algorithm> // for min and max
 #include <fstream> //open and write

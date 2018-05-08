@@ -1,6 +1,5 @@
 #include "sizedialog.h"
 #include "ui_sizedialog.h"
-#include "QDebug"
 
 SizeDialog::SizeDialog(QWidget *parent) :
     QDialog(parent),
@@ -20,5 +19,4 @@ void SizeDialog::on_okButton_clicked(){
 
 void SizeDialog::on_cancelButton_clicked(){
     SizeDialog::closeEvent(0);
-    qApp->exit(0);
 }

@@ -7,7 +7,7 @@ BMP_ui::BMP_ui(int x, int y){
     b_info.biWidth = x;
     b_header.b1 = 'B';
     b_header.b2 = 'M';
-    b_header.bfSize = sizeof(BMPheader)+sizeof(BITMAPinfo)+3*b_info.biWidth*b_info.biHeight + 3*b_info.biHeight*PADDING(b_info.biWidth);
+    b_header.bfSize = sizeof(BMPheader)+sizeof(BITMAPinfo)+3*b_info.biWidth*b_info.biHeight + b_info.biHeight*PADDING(b_info.biWidth);
     b_header.bfOffBits = 54;
     b_info.biPlanes = 1;
     b_info.biSize = sizeof(BITMAPinfo);
@@ -38,6 +38,8 @@ void BMP_ui::Clear(){
 }
 
 void BMP_ui::resizeRaster(int old_y, int new_x, int new_y){
+    b_info.biWidth = new_x;
+    b_info.biHeight = new_y;
     for(int i = 0; i < old_y; i++){
         delete [] pixels[i];
     }
@@ -92,16 +94,6 @@ void BMP_ui::Save(QString filename){
     }
     BMPheader save_header;
     BITMAPinfo save_info;
-    /*save_header.b1 = 'B';
-    save_header.b2 = 'M';
-    save_header.bfOffBits = sizeof(BMPheader) + sizeof(BITMAPinfo);
-    save_header.bfSize = save_header.bfOffBits + 3*b_info.biHeight*b_info.biWidth + 3*b_info.biHeight*PADDING(b_info.biWidth);
-    save_info.biSize = sizeof(BITMAPinfo);
-    save_info.biBitCount = 24;
-    save_info.biHeight = b_info.biHeight;
-    save_info.biWidth = b_info.biWidth;
-    save_info.biXPelsPerMeter = 0;
-    save_info.biYPelsPerMeter = 0;*/
     mempcpy(&save_header, &b_header, sizeof(BMPheader));
     mempcpy(&save_info, &b_info, sizeof(BITMAPinfo));
 
@@ -179,8 +171,8 @@ void BMP_ui::FillCircle(int x1, int y1, int r, QColor color){
     if(valuey1 < 0) valuey1 = 0;
     int valuex2 = x1+r;
     int valuey2 = y1+r;
-    if(valuex2 > static_cast<unsigned char>(b_info.biWidth)) valuex2 = b_info.biWidth;
-    if(valuey2 > static_cast<unsigned char>(b_info.biHeight)) valuey2 = b_info.biHeight;
+    if(valuex2 > b_info.biWidth) valuex2 = b_info.biWidth;
+    if(valuey2 > b_info.biHeight) valuey2 = b_info.biHeight;
 
     for(int i  = valuey1; i < valuey2; i++){
         for(int j  = valuex1; j < valuex2; j++){
@@ -206,8 +198,8 @@ void BMP_ui::Invert(int x1, int y1, int r){
 
     int valuex2 = x1+r;
     int valuey2 = y1+r;
-    if(valuex2 > static_cast<int>(b_info.biWidth)) valuex2 = b_info.biWidth;
-    if(valuey2 > static_cast<int>(b_info.biHeight)) valuey2 = b_info.biHeight;
+    if(valuex2 > b_info.biWidth) valuex2 = b_info.biWidth;
+    if(valuey2 > b_info.biHeight) valuey2 = b_info.biHeight;
 
     for(int i  = valuey1; i < valuey2; i++){
         for(int j  = valuex1; j < valuex2; j++){
