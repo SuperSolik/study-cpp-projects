@@ -6,24 +6,24 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
     QRect rect = frameGeometry();
     rect.moveCenter(QDesktopWidget().availableGeometry().center());
     move(rect.topLeft());
+    ui->setupUi(this);
+    setWindowTitle("BMP_DRAWING");
     scene = new paintScene();
     ui->graphicsView->setScene(scene);
+    connect(scene, SIGNAL(mouse_pressed(QPointF, QPointF)), this, SLOT(Action(QPointF, QPointF)));
     this->setCentralWidget(ui->splitter);
     timer = new QTimer;
     connect(timer, &QTimer::timeout, this, &MainWindow::slotTimer);
     timer->start(100);
-    setWindowTitle("BMP_DRAWING");
     data = new Info();
-    filename = "new.bmp";
-    connect(scene, SIGNAL(mouse_pressed(QPointF, QPointF)), this, SLOT(Action(QPointF, QPointF)));
     start_dialog = new SizeDialog();
     connect(start_dialog, SIGNAL(get_size(int, int)), this, SLOT(Set_Size(int, int)));
     start_dialog->setWindowFlags(Qt::WindowStaysOnTopHint);
     start_dialog->show();
+    filename = "new.bmp";
 }
 
 MainWindow::~MainWindow(){
@@ -32,16 +32,27 @@ MainWindow::~MainWindow(){
     delete data;
     delete start_dialog;
     delete timer;
-    if(created) delete bmp;
+    if(created_bmp) delete bmp;
 }
 
 void MainWindow::slotTimer(){
     timer->stop();
-    if(bmp->b_info.biWidth >= ui->graphicsView->width() ||
+    if(bmp->b_info.biWidth >= ui->graphicsView->width() &&
        bmp->b_info.biHeight >= ui->graphicsView->height()){
         scene->setSceneRect(0, 0, bmp->b_info.biWidth - 10,  bmp->b_info.biHeight - 10);
     }
-    else scene->setSceneRect(0, 0, ui->graphicsView->width() - 10,  ui->graphicsView->height() - 10);
+    if(bmp->b_info.biWidth >= ui->graphicsView->width() &&
+       bmp->b_info.biHeight < ui->graphicsView->height()){
+        scene->setSceneRect(0, 0, bmp->b_info.biWidth - 10,  ui->graphicsView->height() - 10);
+    }
+    if(bmp->b_info.biWidth < ui->graphicsView->width() &&
+       bmp->b_info.biHeight >= ui->graphicsView->height()){
+        scene->setSceneRect(0, 0, ui->graphicsView->width() - 10,  bmp->b_info.biHeight - 10);
+    }
+    if(bmp->b_info.biWidth < ui->graphicsView->width() &&
+       bmp->b_info.biHeight < ui->graphicsView->height()){
+        scene->setSceneRect(0, 0, ui->graphicsView->width() - 10,  ui->graphicsView->height() - 10);
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event){
@@ -50,13 +61,13 @@ void MainWindow::resizeEvent(QResizeEvent *event){
 }
 
 void MainWindow::Set_Size(int s_width, int s_height){
-    if(created){
+    if(created_bmp){
         delete bmp;
         created_new = true;
     }
     bmp = new BMP_ui(s_width, s_height);
     MainWindow::resize(s_width + ui->groupBox->width() + 20, s_height + 60);
-    created = true;
+    created_bmp = true;
     bmp->Clear();
     drawRaster();
     data->setData(filename,
@@ -92,15 +103,7 @@ void MainWindow::Action(QPointF start, QPointF end){
 }
 
 void MainWindow::drawRaster(){
-    QPixmap image(bmp->b_info.biWidth, bmp->b_info.biHeight);
-    QPainter painter(&image);
-    for(int y = 0; y < bmp->b_info.biHeight; y++){
-        for(int x = 0; x < bmp->b_info.biWidth; x++){
-            painter.setPen(QColor(bmp->pixels[y][x].rgbRed, bmp->pixels[y][x].rgbGreen, bmp->pixels[y][x].rgbBlue));
-            painter.drawPoint(x, y);
-        }
-    }
-    scene->addPixmap(image);
+    scene->addPixmap(QPixmap::fromImage(bmp->DrawImage()));
 }
 
 void MainWindow::on_actionNew_triggered(){
@@ -165,6 +168,10 @@ void MainWindow::on_cropButton_clicked(){
 }
 
 void MainWindow::on_actionShowData_triggered(){
+    if(bmp == nullptr){
+        QMessageBox::information(0, "Error", "File hasn't been opened, open a file before call info!");
+        return;
+    }
     data->setData(filename,
                   bmp->b_info.biBitCount,
                   bmp->b_info.biWidth,

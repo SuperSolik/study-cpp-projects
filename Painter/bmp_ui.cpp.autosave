@@ -235,22 +235,18 @@ void BMP_ui::Crop(int x1, int y1, int x2, int y2){
         QMessageBox::information(0, "Error", "Wrong coordinates, try again");
         return;
     }
-
     int begin_x = std::min(x1, x2);
     int begin_y = std::min(y1, y2);
     int end_x = std::max(x1, x2);
     int end_y = std::max(y1, y2);
-
     if(end_x > b_info.biWidth - 1) end_x = b_info.biWidth - 1;
     if(end_y > b_info.biHeight - 1) end_y = b_info.biHeight - 1;
     int temp_w = end_x - begin_x;
     int temp_h = end_y - begin_y;
-
     RGBTriple** buffer = new RGBTriple* [temp_h];
     for(int i = 0; i < temp_h; i++){
         buffer[i] = new RGBTriple[temp_w];
     }
-
     int i = 0, j = 0;
     for(int y  = begin_y; y < end_y; y++){
         for(int x  = begin_x; x < end_x; x++){

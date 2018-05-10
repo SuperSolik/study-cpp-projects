@@ -38,10 +38,9 @@ private:
     bool draw_flag = false;
     bool invert_flag = false;
     bool crop_flag = false;
-    bool created = false;
+    bool created_bmp = false;
     bool created_new = false;
     bool error = false;
-
 
 private:
     void resizeEvent(QResizeEvent *event);

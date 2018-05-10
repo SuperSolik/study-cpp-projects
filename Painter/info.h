@@ -24,9 +24,9 @@ private:
 private:
     Ui::Info *ui;
     QTimer* timer;
+
 private slots:
     void slotTimer();
 };
-
 
 #endif // INFO_H

@@ -12,7 +12,6 @@ class BMP_ui:public QObject{
     Q_OBJECT
 
 public:
-
     #pragma pack(push)
     #pragma pack(1)
     struct BMPheader{
@@ -55,6 +54,7 @@ public:
 
 
 public:
+    QImage DrawImage();
     void resizeRaster(int old_y, int new_x, int new_y);
     void Load(QString filename);
     void Save(QString filename);
