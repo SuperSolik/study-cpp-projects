@@ -65,6 +65,7 @@ void MainWindow::Set_Size(int s_width, int s_height){
         delete bmp;
         created_new = true;
     }
+    scene->clear();
     bmp = new BMP_ui(s_width, s_height);
     MainWindow::resize(s_width + ui->groupBox->width() + 20, s_height + 60);
     created_bmp = true;
