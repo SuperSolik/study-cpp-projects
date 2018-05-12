@@ -173,8 +173,8 @@ void MainWindow::on_cropButton_clicked(){
 }
 
 void MainWindow::on_actionShowData_triggered(){
-    if(bmp == nullptr){
-        QMessageBox::information(0, "Error", "File hasn't been opened, open a file before call info!");
+    if(!created_bmp){
+        QMessageBox::information(0, "Error", "Image hasn't been created/opened yet!");
         return;
     }
     data->setData(filename,
