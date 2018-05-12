@@ -5,6 +5,7 @@ Info::Info(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Info)
 {
+    this->resize(500, 350);
     ui->setupUi(this);
     setWindowTitle("Info");
     timer = new QTimer;

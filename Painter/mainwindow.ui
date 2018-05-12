@@ -24,20 +24,7 @@
     <normaloff>:/images/icon2.png</normaloff>:/images/icon2.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QPushButton {
-    padding:4px;
-    color: #fff;
-    font-size: 14px;
-    border-radius: 2px;
-    border: 1px solid #3873d9;
-    background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,
-                                        stop: 0 #4287ff, stop: 1 #356ccc);
- }
-QPushButton:pressed {
-    color: #111;
-    border: 1px solid #3873d9;
-    background: #fff;
- }</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QSplitter" name="splitter">
@@ -129,7 +116,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>19</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

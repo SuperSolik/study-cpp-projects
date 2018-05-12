@@ -114,6 +114,10 @@ void MainWindow::on_actionNew_triggered(){
 }
 
 void MainWindow::on_actionOpen_triggered(){
+    if(!created_bmp){
+        QMessageBox::information(0, "Error", "Image hasn't been created yet");
+        return;
+    }
     scene->clear();
     filename = QFileDialog::getOpenFileName(this, "Open");
     bmp->Load(filename);

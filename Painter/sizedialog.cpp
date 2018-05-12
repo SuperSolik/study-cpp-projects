@@ -5,6 +5,7 @@ SizeDialog::SizeDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SizeDialog)
 {
+    this->setFixedSize(QSize(325, 75));
     ui->setupUi(this);
 }
 
