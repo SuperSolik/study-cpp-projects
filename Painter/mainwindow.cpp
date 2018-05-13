@@ -132,10 +132,18 @@ void MainWindow::on_actionOpen_triggered(){
 }
 
 void MainWindow::on_actionSave_triggered(){
+    if(!created_bmp){
+        QMessageBox::information(0, "Error", "Image hasn't been created yet");
+        return;
+    }	
     bmp->Save(filename);
 }
 
 void MainWindow::on_actionSave_As_triggered(){
+    if(!created_bmp){
+        QMessageBox::information(0, "Error", "Image hasn't been created yet");
+        return;
+    }
     filename = QFileDialog::getSaveFileName(this,"Save As" , "","*.bmp");
     bmp->Save(filename);
 }
