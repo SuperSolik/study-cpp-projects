@@ -15,8 +15,6 @@ BMP_ui::BMP_ui(int x, int y){
     b_info.biPlanes = 1;
     b_info.biSize = sizeof(BITMAPinfo);
     b_info.biBitCount = 24;
-    b_info.biXPelsPerMeter = 0;
-    b_info.biYPelsPerMeter = 0;
     pixels = new RGBTriple* [b_info.biHeight];
     for(int i = 0; i < b_info.biHeight; i++){
         pixels[i] = new RGBTriple[b_info.biWidth];

@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "QDebug"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -135,7 +134,7 @@ void MainWindow::on_actionSave_triggered(){
     if(!created_bmp){
         QMessageBox::information(0, "Error", "Image hasn't been created yet");
         return;
-    }	
+    }
     bmp->Save(filename);
 }
 
