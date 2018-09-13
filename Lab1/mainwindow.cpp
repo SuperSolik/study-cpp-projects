@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("SyntaxAnalizer");
+    this->setCentralWidget(ui->splitter_4);
 }
 
 MainWindow::~MainWindow()
@@ -17,7 +18,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionHelp_triggered()
 {
     Help* help = new Help(":/files", "source.html");
-    help->resize(500, 300);
+    help->resize(550, 300);
     help->show();
 }
 
@@ -51,7 +52,7 @@ void MainWindow::on_pushButton_3_clicked()
     std::ofstream output;
     input.open(infile_name.toStdString(), std::ios::in);
     if (!input.is_open()){
-        QMessageBox::information(0, "Error", "File can't be opened");
+        QMessageBox::information(0, "Error", "No file specified for input");
         return;
     }
     output.open(outfile_name.toStdString(), std::ios::out);
