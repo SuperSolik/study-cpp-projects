@@ -18,6 +18,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionHelp_triggered()
 {
     Help* help = new Help(":/files", "source.html");
+    help->setAttribute(Qt::WA_DeleteOnClose);
     help->resize(550, 300);
     help->show();
 }
@@ -79,11 +80,11 @@ void MainWindow::on_pushButton_3_clicked()
 }
 
 bool MainWindow::is_op(char c){
-    if (c == '+' || c == '-' || c == '*') return true;
-    else return false;
+	if (c == '+' || c == '-' || c == '*') return true;
+	else return false;
 }
 
-bool MainWindow::simple_expr(std::istringstream& input){
+bool MainWindow::simple_expr(std::istringstream& input, bool main_bracket = false){
     char c;
     input >> c;
     bool res;
@@ -101,6 +102,11 @@ bool MainWindow::simple_expr(std::istringstream& input){
             }
         }
     }
+    if (main_bracket){
+        input.peek();
+        if (!input.eof())
+            return false;
+    }
     return res;
 }
 
@@ -113,5 +119,5 @@ bool MainWindow::check(std::istringstream& input){
         else return false;
     }
     input.seekg(0, input.beg);
-    return simple_expr(input);
+    return simple_expr(input, true);
 }

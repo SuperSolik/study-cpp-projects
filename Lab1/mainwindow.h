@@ -37,7 +37,7 @@ private:
     QString infile_name = "";
     QString outfile_name = "output.txt";
     bool is_op(char c);
-    bool simple_expr(std::istringstream& input);
+    bool simple_expr(std::istringstream& input, bool main_bracket);
     bool check(std::istringstream& input);
 };
 
