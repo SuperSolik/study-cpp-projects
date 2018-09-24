@@ -1,0 +1,8 @@
+(ab(cd)e)
+(a(b(ce)f))
+(abcdef)
+((ab)c(d(ef(g))h))
+(a(bc)d)
+(ab(c)d)
+()
+(a(b(c(d(efgh)))))
