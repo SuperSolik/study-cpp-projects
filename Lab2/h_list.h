@@ -1,20 +1,16 @@
 #pragma once
 #include <iostream>
 #include <string>
-namespace h_list
-{
+namespace h_list{
     typedef std::string base;
     struct s_expr;
-    struct two_ptr
-    {
+    struct two_ptr{
         s_expr* hd;
         s_expr* tl;
     };
-    struct s_expr
-    {
+    struct s_expr{
         bool tag;
-        struct
-        {
+        struct{
             base atom;
             two_ptr pair;
         } node;

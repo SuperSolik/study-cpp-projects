@@ -2,74 +2,58 @@
 #include <cstdlib>
 #include "h_list.h"
 
-namespace h_list
-{
+namespace h_list{
 //....................................
-lisp head (const lisp& s)
-{
+lisp head (const lisp& s){
     if (s != NULL)
         if (!isAtom(s))
             return s->node.pair.hd;
-        else
-        {
+        else{
             std::cerr << "Error: Head(atom) \n";
             exit(1);
         }
-    else
-    {
+    else{
         std::cerr << "Error: Head(nil) \n";
         exit(1);
     }
 }
 //.......................................
-bool isAtom (const lisp& s)
-{
+bool isAtom (const lisp& s){
     if(s == NULL)
         return false;
     else
         return (s -> tag);
 }
 //.......................................
-bool isNull (const lisp& s)
-{
+bool isNull (const lisp& s){
     return s == NULL;
 }
 //.......................................
-lisp tail (const lisp& s)
-{
+lisp tail (const lisp& s){
     if (s != NULL)
         if (!isAtom(s))
             return s->node.pair.tl;
-        else
-        {
+        else{
             std::cerr << "Error: Tail(atom) \n";
             exit(1);
         }
-    else
-    {
+    else{
         std::cerr << "Error: Tail(nil) \n";
         exit(1);
     }
 }
 //.......................................
-lisp cons (const lisp& h, const lisp& t)
-{
+lisp cons (const lisp& h, const lisp& t){
     lisp p;
-    if (isAtom(t))
-    {
+    if (isAtom(t)){
         std::cerr << "Error: Cons(*, atom)\n";
         exit(1);
-    }
-    else
-    {
+    }else{
         p = new s_expr;
-        if ( p == NULL)
-        {
+        if ( p == NULL){
             std::cerr << "Memory not enough\n";
             exit(1);
-        }
-        else
-        {
+        }else{
             p->tag = false;
             p->node.pair.hd = h;
             p->node.pair.tl = t;
@@ -78,8 +62,7 @@ lisp cons (const lisp& h, const lisp& t)
     }
 }
 //...........................
-lisp make_atom(const base x)
-{
+lisp make_atom(const base x){
     lisp s;
     s = new s_expr;
     s -> tag = true;
@@ -88,12 +71,9 @@ lisp make_atom(const base x)
 }
 
 //...........................
-void destroy (const lisp& s)
-{
-    if ( s != NULL)
-    {
-        if (!isAtom(s))
-        {
+void destroy (const lisp& s){
+    if ( s != NULL){
+        if (!isAtom(s)){
             destroy (head(s));
             destroy (tail(s));
         }
@@ -101,26 +81,17 @@ void destroy (const lisp& s)
     }
 }
 //...........................
-lisp concat (const lisp& y, const lisp& z)
-{
-    if (isNull(y)) return copy_lisp(z);
-    else return cons(copy_lisp(head (y)), concat (tail(y), z));
-} // end concat
-//...........................
-lisp reverse(const lisp s)
-{
+lisp reverse(const lisp s){
     return rev(s, NULL);
 }
 //...........................
-lisp rev(const lisp s, const lisp z)
-{
+lisp rev(const lisp s, const lisp z){
     if(isNull(s)) return(z);
     else if(isAtom(head(s))) return(rev(tail(s), cons(head(s),z)));
     else return(rev(tail(s), cons(rev(head(s), NULL),z)));
 }
 //...........................
-void read_lisp(lisp& y, std::istream& in, std::ostream& err)
-{
+void read_lisp(lisp& y, std::istream& in, std::ostream& err){
     char x;
     do{
         in >> x;
@@ -128,10 +99,8 @@ void read_lisp(lisp& y, std::istream& in, std::ostream& err)
     read_s_expr(x, y, in, err);
 }
 //...........................
-void read_s_expr (char prev, lisp& y, std::istream& in, std::ostream& err)
-{
-    if (prev == ')')
-    {
+void read_s_expr (char prev, lisp& y, std::istream& in, std::ostream& err){
+    if (prev == ')'){
         err << "Wrong bracket : \')\' instead of \'(\'"<<" ";
         return;
     }
@@ -150,13 +119,11 @@ void read_s_expr (char prev, lisp& y, std::istream& in, std::ostream& err)
         read_seq(y, in, err);
 }
 //...........................
-void read_seq ( lisp& y, std::istream& in, std::ostream& err)
-{
+void read_seq ( lisp& y, std::istream& in, std::ostream& err){
     char x;
     lisp p1, p2;
 
-    if (!(in >> x))
-    {
+    if (!(in >> x)){
         err <<"Problems with istream"<<" ";
         return;
     } else {
@@ -174,37 +141,22 @@ void read_seq ( lisp& y, std::istream& in, std::ostream& err)
 }
 //...........................
 
-void write_lisp (const lisp x, std::ostream& out=std::cout)
-{
+void write_lisp (const lisp x, std::ostream& out=std::cout){
     if (isNull(x))
         out << " ()";
     else if (isAtom(x))
         out << ' ' << x->node.atom;
-    else
-    {
+    else{
         out << " (" ;
         write_seq(x, out);
         out << " )";
     }
 }
 //...........................
-void write_seq (const lisp x, std::ostream& out=std::cout)
-{
-    if (!isNull(x))
-    {
+void write_seq (const lisp x, std::ostream& out=std::cout){
+    if (!isNull(x)){
         write_lisp(head(x), out);
         write_seq(tail(x), out);
     }
 }
-//...........................
-lisp copy_lisp (const lisp x)
-{
-    if  (isNull(x))
-        return NULL;
-    else if (isAtom(x))
-        return make_atom (x->node.atom);
-    else
-        return cons (copy_lisp (head (x)), copy_lisp (tail(x)));
-}
-
 }
