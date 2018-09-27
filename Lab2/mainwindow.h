@@ -34,11 +34,12 @@ private slots:
 
     void on_actionHelp_triggered();
 
+    void on_actionAbout_triggered();
+
 private:
     Ui::MainWindow *ui;
     QString infile_name = "";
     QString outfile_name = "output.txt";
-    std::vector<h_list::lisp> h_lists;
 };
 
 #endif // MAINWINDOW_H

@@ -10,7 +10,6 @@ class Help:public QWidget{
 public:
     Help(const QString& path, const QString& file_name, QWidget *parent = 0)
         :QWidget(parent){
-        setWindowTitle("Help");
         pcmdBack    = new QPushButton("<<");
         pcmdHome    = new QPushButton("Home");
         pcmdForward = new QPushButton(">>");
