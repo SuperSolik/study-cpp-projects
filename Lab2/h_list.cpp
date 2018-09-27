@@ -119,21 +119,21 @@ lisp rev(const lisp s, const lisp z)
     else return(rev(tail(s), cons(rev(head(s), NULL),z)));
 }
 //...........................
-void read_lisp(lisp& y, std::istream& in=std::cin)
+void read_lisp(lisp& y, std::istream& in, std::ostream& err)
 {
     char x;
     do{
         in >> x;
     }while(x==' ');
-    read_s_expr(x, y, in);
+    read_s_expr(x, y, in, err);
 }
 //...........................
-void read_s_expr (char prev, lisp& y, std::istream& in)
+void read_s_expr (char prev, lisp& y, std::istream& in, std::ostream& err)
 {
     if (prev == ')')
     {
-        std::cerr << " ! List.Error 1 " << std::endl;
-        exit(1);
+        err << "Wrong bracket : \')\' instead of \'(\'"<<" ";
+        return;
     }
     else if ( prev != '(' ){
         std::string str;
@@ -147,18 +147,18 @@ void read_s_expr (char prev, lisp& y, std::istream& in)
         y = make_atom(str);
     }
     else
-        read_seq(y, in);
+        read_seq(y, in, err);
 }
 //...........................
-void read_seq ( lisp& y, std::istream& in)
+void read_seq ( lisp& y, std::istream& in, std::ostream& err)
 {
     char x;
     lisp p1, p2;
 
     if (!(in >> x))
     {
-        std::cerr << " ! List.Error 2 " << std::endl;
-        exit(1);
+        err <<"Problems with istream"<<" ";
+        return;
     } else {
         while(x==' ')
             in >> x;
@@ -166,8 +166,8 @@ void read_seq ( lisp& y, std::istream& in)
             y = NULL;
         else
         {
-            read_s_expr (x, p1, in);
-            read_seq(p2, in);
+            read_s_expr (x, p1, in, err);
+            read_seq(p2, in, err);
             y = cons(p1, p2);
         }
     }

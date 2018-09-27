@@ -33,9 +33,9 @@ namespace h_list
     lisp reverse(const lisp s);
     lisp rev(const lisp s, const lisp z);
 
-    void read_lisp (lisp& y, std::istream& in);
-    void read_s_expr(char prev, lisp& y, std::istream& in);
-    void read_seq (lisp& y, std::istream& in);
+    void read_lisp (lisp& y, std::istream& in, std::ostream& err);
+    void read_s_expr(char prev, lisp& y, std::istream& in, std::ostream& err);
+    void read_seq (lisp& y, std::istream& in, std::ostream& err);
 
     void write_lisp (const lisp x, std::ostream& out);
     void write_seq (const lisp x, std::ostream& out);

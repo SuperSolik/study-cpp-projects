@@ -1,0 +1,6 @@
+(world hello)
+(day(a(what)))
+(aa bb cc dd)
+((aa(bb))cc)
+)text)
+(s(k)(r(o(w)))b(la)))

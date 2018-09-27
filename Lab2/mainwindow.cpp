@@ -25,6 +25,7 @@ void MainWindow::on_OutputButton_clicked()
 
 void MainWindow::on_InputButton_clicked()
 {
+    ui->textEdit->clear();
     infile_name = QFileDialog::getOpenFileName(this,"Choose input file" , "","*.txt *.dat");
     std::ifstream file;
     file.open(infile_name.toStdString(), std::ios::in);
@@ -49,11 +50,16 @@ void MainWindow::on_ActionButton_clicked()
     std::string temp;
     while(std::getline(ss, temp)){
         std::string res;
+        std::string error;
         std::istringstream is(temp);
+        std::ostringstream err(error);
         std::ostringstream os(res);
         lisp t;
-        read_lisp(t, is);
-        write_lisp(reverse(t), os);
+        read_lisp(t, is, err);
+        if (err.str().empty())
+            write_lisp(reverse(t), os);
+        else
+            os << err.str();
         ui->textEdit_2->append(QString::fromStdString(os.str()));
         temp.clear();
     }
@@ -72,7 +78,7 @@ void MainWindow::on_actionHelp_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
     Help* help = new Help(":/doc/", "author.html");
-    help->setWindowTitle("Author Info");
+    help->setWindowTitle("About");
     help->setAttribute(Qt::WA_DeleteOnClose);
     help->resize(450, 350);
     help->show();
