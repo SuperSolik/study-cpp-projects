@@ -65,7 +65,6 @@ void MainWindow::on_EncodeButton_clicked()
         QMessageBox::information(nullptr, "Error", "You haven't chosen encode method");
         return;
     }
-    coder.encode_file(outfile_name.toStdString());
     auto map = coder.get_map();
     for(auto& el : map){
         if(el.first == '\t'){
@@ -76,6 +75,7 @@ void MainWindow::on_EncodeButton_clicked()
             ui->textEdit_2->append(QString::fromStdString(std::string(1, el.first) + " : " + el.second));
         }
     }
+    coder.encode_file(outfile_name.toStdString());
 }
 
 void MainWindow::on_DecodeButton_clicked()

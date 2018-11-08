@@ -1,3 +1,6 @@
+#ifndef HUFFMAN_H
+#define HUFFMAN_H
+
 #include <iostream>
 #include <algorithm>
 #include <string>
@@ -8,13 +11,12 @@
 #include <sstream>
 #include <QDebug>
 
-
 class Coder{
 private:
     struct Node {
-        Node(std::string _chars, int fr) {
+        Node(std::string _chars, int frequence) {
             chars = _chars;
-            freq = fr;
+            freq = frequence;
         }
 
         Node(Node* _left, Node* _right){
@@ -26,8 +28,8 @@ private:
 
         std::string chars;
         int freq = 0;
-        Node *left = nullptr;
-        Node *right = nullptr;
+        Node* left = nullptr;
+        Node* right = nullptr;
         std::string code = "";
 
         ~Node(){
@@ -36,30 +38,39 @@ private:
         }
     };
 
-    struct NodeCompare{
+    struct HuffCompare{
         bool operator()(const Node* first, const Node* second) const{
             return first->freq > second->freq;
+        }
+    };
+
+    struct ShanCompare{
+        bool operator()(const Node* first, const Node* second) const{
+            return first->freq < second->freq;
         }
     };
 
 public:
     Coder(){}
 
+    ~Coder(){
+        delete _root;
+    }
+
     void shannon_encode(std::string const& file_name){
-        clear();
         clear();
         std::ifstream file;
         file.open(file_name, std::ios::in | std::ios::binary);
         std::string buf;
         while(file.good()){
             std::getline(file, buf);
-            text += buf;
+            _text += buf;
         }
         std::map<char, int> freq;
-        for(auto& ch : text){
+        for(auto& ch : _text){
             freq[ch]++;
         }
-        std::priority_queue<Node*, std::vector<Node*>, NodeCompare> sortedChars;
+        std::priority_queue<Node*, std::vector<Node*>, ShanCompare> sortedChars;
         for(auto& node : freq){
             sortedChars.push(new Node(std::string(1, node.first), node.second));
         }
@@ -79,7 +90,7 @@ public:
             start += el->chars;
             sortedChars.pop();
         }
-        _root = new Node(start, text.size());
+        _root = new Node(start, _text.size());
         makeShannonCodes(_root, freq, res);
         _map = res;
     }
@@ -91,13 +102,13 @@ public:
         std::string buf;
         while(file.good()){
             std::getline(file, buf);
-            text += buf;
+            _text += buf;
         }
         std::map<char, int> freq;
-        for(auto& ch : text){
+        for(auto& ch : _text){
             freq[ch]++;
         }
-        std::priority_queue<Node*, std::vector<Node*>, NodeCompare> sortedChars;
+        std::priority_queue<Node*, std::vector<Node*>, HuffCompare> sortedChars;
         for(auto& node : freq){
             sortedChars.push(new Node(std::string(1, node.first), node.second));
         }
@@ -132,7 +143,7 @@ public:
         std::string res;
         int count  = 0;
         unsigned char ch = 0;
-        for(auto& c : text){
+        for(auto& c : _text){
             std::string code = _map[c];
             res += _map[c];
             for(int i = 0; i < code.size(); i++){
@@ -184,15 +195,9 @@ public:
         return _map;
     }
 
-    std::string get_text() const{
-        return text;
-    }
-
-    ~Coder(){
-        delete _root;
-    }
-
 private:
+
+
     void write_tree(Node* node, std::ofstream& file){
         if(!node->left && !node->right){
             file.write("1", sizeof(char));
@@ -217,9 +222,8 @@ private:
         }
     }
 
-
     void clear(){
-        text.clear();
+        _text.clear();
         _map.clear();
         if(_root){
             delete _root;
@@ -254,5 +258,7 @@ private:
 
     Node* _root = nullptr;
     std::map<char, std::string> _map;
-    std::string text = "";
+    std::string _text = "";
 };
+
+#endif
