@@ -40,13 +40,13 @@ private:
 
     struct HuffCompare{
         bool operator()(const Node* first, const Node* second) const{
-            return first->freq > second->freq;
+            return first->freq >= second->freq;
         }
     };
 
     struct ShanCompare{
         bool operator()(const Node* first, const Node* second) const{
-            return first->freq < second->freq;
+            return first->freq <= second->freq;
         }
     };
 

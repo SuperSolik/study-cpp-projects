@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(ui->splitter_5);
     setWindowTitle("Characters encoding");
     resize(1200, 600);
+    ui->textEdit->setReadOnly(true);
+    ui->textEdit_2->setReadOnly(true);
 }
 
 MainWindow::~MainWindow()
@@ -28,7 +30,7 @@ void MainWindow::on_actionHelp_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
     About* about = new About(":/doc/", "author.html");
-    about->setWindowTitle("Help");
+    about->setWindowTitle("About");
     about->resize(450, 350);
     about->show();
     about->setAttribute(Qt::WA_DeleteOnClose);
@@ -37,6 +39,7 @@ void MainWindow::on_actionAbout_triggered()
 void MainWindow::on_InputButton_clicked()
 {
     ui->textEdit->clear();
+    ui->textEdit_2->clear();
     infile_name = QFileDialog::getOpenFileName(this,"Choose input file" , "","*.txt *.dat *.cpp *.h");
     std::ifstream file;
     file.open(infile_name.toStdString(), std::ios::in);
