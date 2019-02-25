@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>doc/author.html</file>
+        <file>doc/avatar.jpeg</file>
+        <file>doc/queen.png</file>
+        <file>doc/source.html</file>
+        <file>doc/task.html</file>
+        <file>doc/work.html</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>698</width>
+    <height>422</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>698</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionSolveAll"/>
+   <addaction name="actionSolveTask"/>
+   <addaction name="actionplaceQueen"/>
+   <addaction name="actionsetBoardSize"/>
+  </widget>
+  <action name="actionSolveAll">
+   <property name="text">
+    <string>SolveAll</string>
+   </property>
+   <property name="toolTip">
+    <string>SolveAll</string>
+   </property>
+  </action>
+  <action name="actionSolveTask">
+   <property name="text">
+    <string>SolveTask</string>
+   </property>
+   <property name="toolTip">
+    <string>SolveTask</string>
+   </property>
+  </action>
+  <action name="actionplaceQueen">
+   <property name="text">
+    <string>placeQueen</string>
+   </property>
+  </action>
+  <action name="actionsetBoardSize">
+   <property name="text">
+    <string>setBoardSize</string>
+   </property>
+   <property name="toolTip">
+    <string>setBoardSize</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
