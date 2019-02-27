@@ -6,8 +6,10 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QThread>
 #include <QPen>
 #include <fstream>
+#include <map>
 #include "graphwidget.h"
 #include "sizedialog.h"
 #include "nqueen.h"
@@ -37,6 +39,8 @@ private slots:
 
     void placeQueen(int row, int col);
 
+    void delay();
+
 private:
     Ui::MainWindow *ui;
     GraphWidget* graphicsView;
@@ -44,6 +48,7 @@ private:
     Board* board;
     bool board_rdy;
     bool queen_placed;
+    std::map<int, int> delays;
 };
 
 #endif // MAINWINDOW_H

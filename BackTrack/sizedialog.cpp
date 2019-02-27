@@ -10,8 +10,8 @@ SizeDialog::SizeDialog(QWidget *parent, bool flag, int size) :
     this->flag = flag;
     if(flag){
         this->setWindowTitle("Board size");
-        ui->wBox->setMinimum(0);
-        ui->wBox->setMaximum(12);
+        ui->wBox->setMinimum(4);
+        ui->wBox->setMaximum(10);
         ui->wBox->setValue(8);
         ui->label->setText("Enter board size");
         ui->label_2->hide();

@@ -1,5 +1,25 @@
 #include "nqueen.h"
 
+void transpose(std::vector<int>& v, int size){
+    for(int i = 0; i < size; i++){
+        for(int j = i; j < size; j++){
+            std::swap(v[i*size + j], v[j*size + i]);
+        }
+    }
+}
+
+void hflip(std::vector<int>& v, int size){
+    for(int i = 0; i < size; i++){
+        std::reverse(v.begin()+i*size, v.begin()+(i+1)*size);
+    }
+}
+
+void vflip(std::vector<int>& v, int size){
+    transpose(v, size);
+    hflip(v, size);
+    transpose(v, size);
+}
+
 Board::Board(int size)
     : board_size(size)
 {
@@ -88,9 +108,16 @@ std::ostream& operator<<(std::ostream& os, Board& b){
     return os;
 }
 
+int Board::operator[](int index){
+    if (index < board_size*board_size){
+        return board[index];
+    }
+    throw std::out_of_range("index > size");
+}
+
 NQueen::NQueen() :
     QObject()
-    {}
+{}
 
 bool NQueen::solveTaskHelper(Board& board, int col, int count){
     if(!count){
@@ -100,12 +127,14 @@ bool NQueen::solveTaskHelper(Board& board, int col, int count){
     for(int i = 0; i < board.size(); i++){
         if(board.isSafe(i, col)){
             board.placeQueen(i, col);
+            emit setdelay();
             emit widget_placeQueen(i, col);
             int t_col = col;
             if(++t_col >= board.size()) t_col = 0;
             if(solveTaskHelper(board, t_col, count-1)) return true;
             board.removeQueen(i, col);
             emit widget_removeQueen(i, col);
+            emit setdelay();
         }
     }
     return false;
@@ -118,7 +147,7 @@ bool NQueen::solveTask(Board& board){
 
 void NQueen::solveAllHelper(Board board, int col){
     if(col >= board.size()){
-        solutions.push_back(board);
+        if(unique_sol(board)) solutions.push_back(board);
         return;
     }
     for(int i = 0; i < board.size(); i++){
@@ -161,5 +190,35 @@ int NQueen::s_col() const{
     return start_col;
 }
 
-
-
+bool NQueen::unique_sol(Board& board){
+    if(solutions.size() < 1) return true;
+    auto cur_board = board.get_board();
+    for(auto& el : solutions){
+        auto sol_board = el.get_board();
+        if(sol_board == cur_board) return false;
+        hflip(cur_board, board.size());
+        if(sol_board == cur_board) return false;
+        hflip(cur_board, board.size());
+        vflip(cur_board, board.size()); //90 degrees
+        transpose(cur_board, board.size());
+        if(sol_board == cur_board) return false;
+        hflip(cur_board, board.size());
+        if(sol_board == cur_board) return false;
+        hflip(cur_board, board.size());
+        vflip(cur_board, board.size()); //180 degrees
+        transpose(cur_board, board.size());
+        if(sol_board == cur_board) return false;
+        hflip(cur_board, board.size());
+        if(sol_board == cur_board) return false;
+        hflip(cur_board, board.size());
+        vflip(cur_board, board.size()); //270 degrees
+        transpose(cur_board, board.size());
+        if(sol_board == cur_board) return false;
+        hflip(cur_board, board.size());
+        if(sol_board == cur_board) return false;
+        hflip(cur_board, board.size());
+        vflip(cur_board, board.size()); //back to normal
+        transpose(cur_board, board.size());
+    }
+    return true;
+}

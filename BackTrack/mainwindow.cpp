@@ -14,6 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
     queen_placed = false;
     connect(problem, SIGNAL(widget_placeQueen(int, int)), graphicsView, SLOT(placeQueen(int, int)));
     connect(problem, SIGNAL(widget_removeQueen(int, int)), graphicsView, SLOT(removeQueen(int, int)));
+    connect(problem, SIGNAL(setdelay()), this, SLOT(delay()));
+    for(int i = 4, delay = 500; i < 9; i++, delay -= 100){
+        delays[i] = delay;
+    }
+    delays[9] = 50;
+    delays[10] = 25;
+    setWindowTitle("NQueen");
 }
 
 MainWindow::~MainWindow()
@@ -51,9 +58,10 @@ void MainWindow::on_actionSolveTask_triggered()
         return;
     }
     if(!problem->solveTask(*board)){
-        QMessageBox::information(nullptr, "Error", "There is no solutions for this config");
+        QMessageBox::information(nullptr, "Error", "There is no solution for this config");
         return;
     }
+    QMessageBox::information(nullptr, "Success", "Solution has been found!");
     std::ofstream file;
     file.open("solutions.txt", std::ios::out);
     if(!file.good()){
@@ -94,4 +102,14 @@ void MainWindow::setBoardSize(int size){
     graphicsView->drawBoard(board->size());
     board_rdy = true;
     queen_placed = false;
+}
+
+void MainWindow::delay(){
+    QEventLoop loop;
+    QTimer timer;
+
+    timer.setSingleShot(true);
+    connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
+    timer.start(delays[board->size()]);
+    loop.exec();
 }

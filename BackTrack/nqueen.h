@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
+#include <exception>
 
 class Board
 {
@@ -22,6 +24,8 @@ public:
     std::vector<int> get_board();
     friend std::ostream& operator<<(std::ostream& os, Board& b);
 
+    int operator[](int index);
+
 private:
     //std::vector<std::vector<int>> board;
     std::vector<int> board;
@@ -33,22 +37,27 @@ class NQueen : public QObject
     Q_OBJECT
 public:
     NQueen();
-    void solveAllHelper(Board board, int col);
     void solveAll(Board& board);
-    bool solveTaskHelper(Board& board, int col, int count);
     bool solveTask(Board& board);
     void placeQueen(Board& board, int row, int col);
     void print_solutions(std::ostream& os);
     int s_row() const;
     int s_col() const;
+    bool unique_sol(Board& board);
 
 signals:
     void widget_placeQueen(int row, int col);
     void widget_removeQueen(int row, int col);
+    void setdelay();
 
 private:
+    int hash_board(Board& board);
+    bool solveTaskHelper(Board& board, int col, int count);
+    void solveAllHelper(Board board, int col);
+    void prepare_prime_matrix(int _size);
     int start_row;
     int start_col;
+
     std::vector<Board> solutions;
 };
 
