@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     delays[9] = 50;
     delays[10] = 25;
     setWindowTitle("NQueen");
+    filename = "solutions.txt";
 }
 
 MainWindow::~MainWindow()
@@ -38,7 +39,7 @@ void MainWindow::on_actionSolveAll_triggered()
     graphicsView->drawBoard(board->size());
     problem->solveAll(*board);
     std::ofstream file;
-    file.open("solutions.txt", std::ios::out);
+    file.open(filename.toStdString(), std::ios::out);
     if(!file.good()){
         QMessageBox::information(nullptr, "Error", "File can't be opened");
         return;
@@ -63,7 +64,7 @@ void MainWindow::on_actionSolveTask_triggered()
     }
     QMessageBox::information(nullptr, "Success", "Solution has been found!");
     std::ofstream file;
-    file.open("solutions.txt", std::ios::out);
+    file.open(filename.toStdString(), std::ios::out);
     if(!file.good()){
         QMessageBox::information(nullptr, "Error", "File can't be opened");
         return;
@@ -112,4 +113,28 @@ void MainWindow::delay(){
     connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
     timer.start(delays[board->size()]);
     loop.exec();
+}
+
+void MainWindow::on_actionHelp_triggered()
+{
+    Help* help = new Help(":/doc/", "source.html");
+    help->setWindowTitle("Help");
+    help->resize(450, 350);
+    help->show();
+    help->setAttribute(Qt::WA_DeleteOnClose);
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    About* about = new About(":/doc/", "author.html");
+    about->setWindowTitle("About");
+    about->resize(450, 350);
+    about->show();
+    about->setAttribute(Qt::WA_DeleteOnClose);
+}
+
+void MainWindow::on_actionChoose_out_file_triggered()
+{
+    filename = QFileDialog::getSaveFileName(this, "Choose output file", "","*.txt;;*.dat");
+    if(filename.isNull()) filename = "solutions.txt";
 }

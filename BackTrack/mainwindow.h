@@ -10,6 +10,8 @@
 #include <QPen>
 #include <fstream>
 #include <map>
+#include "help.h"
+#include "about.h"
 #include "graphwidget.h"
 #include "sizedialog.h"
 #include "nqueen.h"
@@ -41,6 +43,12 @@ private slots:
 
     void delay();
 
+    void on_actionHelp_triggered();
+
+    void on_actionAbout_triggered();
+
+    void on_actionChoose_out_file_triggered();
+
 private:
     Ui::MainWindow *ui;
     GraphWidget* graphicsView;
@@ -49,6 +57,7 @@ private:
     bool board_rdy;
     bool queen_placed;
     std::map<int, int> delays;
+    QString filename;
 };
 
 #endif // MAINWINDOW_H

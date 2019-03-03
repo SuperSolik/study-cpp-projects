@@ -37,7 +37,9 @@ HEADERS += \
     graphwidget.h \
     node.h \
     nqueen.h \
-    sizedialog.h
+    sizedialog.h \
+    about.h \
+    help.h
 
 FORMS += \
         mainwindow.ui \
