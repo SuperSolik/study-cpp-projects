@@ -35,5 +35,6 @@ sign  ::= - | + | *
 
 ### qt_nqueen_visualization
 C++ Qt visualizaion of solving Nqueen problem using backtracking. Supports two modes: 
-* manual placing first queen, then solving given case
-* solving all cases, prints them to file "solutions.txt"
+
+* manual placing first queen, then solving given case  
+* solving all cases, prints them to file "solutions.txt"  

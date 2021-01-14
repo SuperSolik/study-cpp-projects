@@ -245,6 +245,7 @@ int comp(MusicalComposition* a, MusicalComposition* b){
 	return (a->year) - (b->year);
 }//сравнивает поля year переданных элементов списка
 	
+    
 void sort(MusicalComposition** head){
 	MusicalComposition* current = *head;
 	MusicalComposition* current2;
