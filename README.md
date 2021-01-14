@@ -1,12 +1,12 @@
 # study-cpp-projects
 ### c_labs
 Some C laboratory works, completed during first 1 year of university:  
-* queue.c - implementation of queue data structure  
-* rec_file_searcher.c - tries to recursively search file containing single word "Minotaur" in folder "labyrinth". Initial file must be named "file.txt" and placed somewhere in the "labyrinth" folder. Initial file can linked to other files:  
+*  queue.c - implementation of queue data structure  
+*  rec_file_searcher.c - tries to recursively search file containing single word "Minotaur" in folder "labyrinth". Initial file must be named "file.txt" and placed somewhere in the "labyrinth" folder. Initial file can linked to other files:  
 `@include file2.txt`  
 `@include file3.txt`  
 And linked files can link to another files, and etc. Finally, some file must contain "Minotaur". As result, program prints paths of files, which led to Minotaur, to file "result.txt". Cycled file links (file2.txt -> file3.txt -> file2.txt) are forbidden.  
-* valid_simple_html.c - using implemented stack check if simple (not nested, like `<tag>test</tag>`) xml (tag names doesn't matter, check only braces, except for non-closing tags) is valid. Support non-closing `<br>` and `<hr>` tags tag(`<closing-tag><br>test</closing-tag>`)  
+*  valid_simple_html.c - using implemented stack check if simple (not nested, like `<tag>test</tag>`) xml (tag names doesn't matter, check only braces, except for non-closing tags) is valid. Support non-closing `<br>` and `<hr>` tags tag(`<closing-tag><br>test</closing-tag>`)  
 
 ### prefix_code_course_work
 Course work: C++ Qt implementation of Huffman coding and Shannon-Fano coding algorithms
