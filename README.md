@@ -10,6 +10,14 @@ And linked files can link to another files, and etc. Finally, some file must con
 *  valid_simple_html.c - using implemented stack check if simple (like `<tag>test</tag>` == not nested) xml (tag names doesn't matter, checks only braces, except for non-closing tags) is valid. Support non-closing `<br>` and `<hr>` tags (following is valid: `<closing-tag><br>test</closing-tag>`)  
 *  doubly_linked_list - **course work**: C implementation of doubly-linked list, with bubble sort function
 
+### algo
+Some algorithms, implemented during course "Construction and analysis of algorithms" using C++
+Includes:  
+
+*  Ford-Fulkerson implementation (max_flow.cpp)  
+*  A* implementation (astar.cpp)  
+*  Knuth–Morris–Pratt implementation (kmp.cpp)  
+
 ### prefix_code_course_work
 **Course work**: C++ implementation of Huffman coding and Shannon-Fano coding algorithms. Implemented build of a coding tree, encoding/decoding of a text file using computer codes, along with simple GUI using Qt.
 
