@@ -8,12 +8,13 @@ Some C laboratory works, completed during first 1 year of university:
 `@include file3.txt`  
 And linked files can link to another files, and etc. Finally, some file must contain "Minotaur". As result, program prints paths of files, which led to Minotaur, to file "result.txt". Cycled file links (file2.txt -> file3.txt -> file2.txt) are forbidden.  
 *  valid_simple_html.c - using implemented stack check if simple (like `<tag>test</tag>` == not nested) xml (tag names doesn't matter, checks only braces, except for non-closing tags) is valid. Support non-closing `<br>` and `<hr>` tags (following is valid: `<closing-tag><br>test</closing-tag>`)  
+*  doubly_linked_list - **course work**: C implementation of doubly-linked list, with bubble sort function
 
 ### prefix_code_course_work
-Course work: C++ Qt implementation of Huffman coding and Shannon-Fano coding algorithms
+**Course work**: C++ implementation of Huffman coding and Shannon-Fano coding algorithms. Implemented build of a coding tree, encoding/decoding of a text file using computer codes, along with simple GUI using Qt.
 
 ### qt_bmp_simple_painter
-Course work: C++ Qt implementation of simple bmp painter. Supports: drawing lines, inverting a part of drawing area, cropping a part of drawing area, changing drawing color, control over line thickness. Image format: bmp24.
+**Course work**: C++ Qt implementation of simple bmp painter. Supports: drawing lines, inverting a part of drawing area, cropping a part of drawing area, changing drawing color, control over line thickness. Image format: bmp24.
 
 ### qt_bfs_visualization
 C++ Qt visualization of BFS graph search alhorithm, supports reading graph from file, examples provided in /doc
